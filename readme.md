@@ -4,7 +4,7 @@ Tired of manually grabbing links from github for commit summaries or status upda
 
 Commit getter will also check for invalid links for you (a 404 response), so you can be sure that your links work. Make sure to read the full usage documentation before using.
   
-note: sometimes github likes to throw a 406 response randomly, usually these links are still valid but commit-getter will flag them (while still adding them to the result) in the terminal output so you can check them yourself, if the links are invalid you'll have to remove them manually
+*note: sometimes github likes to throw a 406 response randomly, usually these links are still valid but commit-getter will flag them (while still adding them to the result) in the terminal output so you can check them yourself, if the links are invalid you'll have to remove them manually.*
 
 ### usage:  
   
@@ -15,6 +15,8 @@ install dependencies:
 pip install -r requirements.txt
 ```
 populate .env file, here's an example:
+
+*note: repos and branches are corresponding lists, as in the first repo entry should correspond to the first branch entry, and they must be the same length*
 ```ini
 GITHUB_USERNAME="AZ0228"
 GITHUB_TOKEN="github_pat_sdlfksflkjldfkgjlfk" # not a valid token, should be configured to only be able to see public repos
