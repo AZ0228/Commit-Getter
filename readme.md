@@ -9,6 +9,7 @@ note: sometimes github likes to throw a 406 response randomly, usually these lin
 ### usage:  
   
 make sure you have python and pip installed on your machine, and you are operating from a unix environment like wsl or zsh.  
+
 install dependencies:
 ```
 pip install -r requirements.txt
