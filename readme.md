@@ -1,6 +1,6 @@
 # Commit-Getter
 ### general overview
-Tired of manually grabbing links from github for commit summaries or status updates? Commit-Getter allows you to do so automatically, with control over the date, branch, and number of lines changed.  
+Tired of manually grabbing links from github for commit summaries or status updates? Commit-Getter allows you to do so automatically, with control over the date, branch, and number of lines changed, across multiple repositories.  
 
 Commit getter will also check for invalid links for you (a 404 response), so you can be sure that your links work. Make sure to read the full usage documentation before using.
   
