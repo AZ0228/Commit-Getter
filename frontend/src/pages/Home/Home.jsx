@@ -29,7 +29,6 @@ function Home() {
             sessionStorage.setItem('jwtToken', token);
             sessionStorage.setItem('jwtExpiry', exp);
         }
-        console.log(token);
         return token;
     }
 
@@ -37,42 +36,33 @@ function Home() {
         getToken().then(setJwt);
     }, []);
 
-    async function getRepos() {
-        const apiUrl = `https://api.github.com/repos/AZ0228/Study-Compass`;
-
-        fetch("https://api.github.com/app", {
-            method: "GET",
-            headers: {
-                "Accept": "application/vnd.github+json",
-                "Authorization": `Bearer ${jwt}`,
-                "X-GitHub-Api-Version": "2022-11-28"
+    async function getRepo(apiUrl) {
+        // const apiUrl = `https://api.github.com/repos/${path}}`;
+        try{
+            const repoResponse = await fetch(apiUrl, {
+                headers: {
+                    'Authorization': `${jwt}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                    }
+            });
+            if (!repoResponse.ok) {
+                throw new Error(`HTTP error! Status: ${repoResponse.status}`);  // Throws an error on non-200 responses
             }
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to fetch data from GitHub API. Status: ' + response.status);
-                }
-                return response.json();
-            })
-            .then(data => console.log(data))
-            .catch(error => console.error('Error:', error));
-
-        const repoResponse = await fetch(apiUrl, {
-            headers: {
-                'Authorization': `${jwt}`,
-                'Accept': 'application/vnd.github.v3+json'
-                }
-        });
-        const repoData = await repoResponse.json();
-        console.log(repoData);
-        // setRepos([repos, ...repoData]);
+            const repoData = await repoResponse.json();
+            console.log(repoData);
+        } catch(error){
+            console.error('Error:', error);
+        }
     }
 
-    const addRepo = () => {
-        console.log("Add Repo");
-        getRepos();
-    }
+    const handleSubmitLink = (link) => {
+        getRepo(link);
+    };
 
+    const handleSubmitPath = (path) => {
+        const link = `https://api.github.com/repos/${path}`;
+        getRepo(link);
+    }
 
     return (
         <div className="home">
@@ -86,12 +76,12 @@ function Home() {
                             <MiniForm placeholderText={"Min Changes"} buttonText={"Set"} />
                         </div>
                         <div className="right">
-                            <button onClick={addRepo} className="button">Add Repo</button>
+                            <button className="button">Add Repo</button>
                         </div>
                     </div>
                     <div className="repos">
                         <Repo />
-                        <AddRepo />
+                        <AddRepo handleSubmitLink={handleSubmitLink} handleSubmitPath={handleSubmitPath} />
                     </div>
                 </div>
             </div>

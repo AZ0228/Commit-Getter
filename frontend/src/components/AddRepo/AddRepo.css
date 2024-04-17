@@ -52,3 +52,8 @@
     background-color: var(--bg);
     box-sizing: border-box;
 }
+
+.add-repo-form input:focus{
+    outline: none;
+    border: 1px solid var(--border1);
+}

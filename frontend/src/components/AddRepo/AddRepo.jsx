@@ -1,9 +1,29 @@
-import React from "react";
+import React, {useState}from "react";
 import "./AddRepo.css";
 
 import Icon from "../Icon/Icon";
 
-function AddRepo({handleSubmit}) {    
+function AddRepo({handleSubmitPath, handleSubmitLink}) {    
+    const [path, setPath] = useState('');
+    const [link, setLink] = useState('');
+
+    const onLinkChange = (e) => {
+        setLink(e.target.value);
+    }
+
+    const onPathChange = (e) => {
+        setPath(e.target.value);
+    }
+
+    const onSubmit = (e) => {
+        e.preventDefault();
+        if(path === ''){
+            handleSubmitLink(link);
+        } else {
+            handleSubmitPath(path);
+        }
+    }
+
 
     return (
         <div className="add-repo">
@@ -11,20 +31,22 @@ function AddRepo({handleSubmit}) {
                 <Icon dimension={16} type={"Plus"} />
                 <h2>Add Repository</h2>
             </div>
-            <div className="add-repo-form">
+            <form className="add-repo-form" onSubmit={onSubmit}>
                 <input
                     type="text"
                     placeholder="Repository Path"
                     className="add-repo-input"
+                    onChange={onPathChange}
                 />
                 <p>or</p>
                 <input
                     type="text"
                     placeholder="Repository Link"
                     className="add-repo-input"
+                    onChange={onLinkChange}
                 />
                 <button type="submit" className="button">Add</button>
-            </div>
+            </form>
         </div>
     );
 }
