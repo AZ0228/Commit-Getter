@@ -1,0 +1,11 @@
+curl --request GET \
+--url "https://api.github.com/repos/AZ0228/Study-Compass" \
+--header "Accept: application/vnd.github+json" \
+--header "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTMzMzg3OTksImV4cCI6MTcxMzMzOTM5OSwiaXNzIjoiODc3NTQxIn0.XVHwZ4AudmDMuyv6sSX3M5V2dxpjMnbwbK_CMonJHE0zU-jXsMq991JcP7IHEcH_LIs8jAu4ZfVMosdCnVzJ3w-5My6O9z88rkM2zz0N2vChMO2v-Lbf67hlIonw9T65rzDIeh30qJg5swsfpDJfsFX95q2v_EIuadoIDEcRazZyQMboevdpK3pfZPVBJnyWC1h9DfDST0OHB4IHuTF2mYYU9bwXyGKNRvyO3AUjgg7OgMNd9tcS7KDBNZMoIhA4M24k_nBeSOyvwhnOPFx6oRFhQRRH0t-NFNA13m9Cze70glrGNRSAsaBIF37e5I5pwUZbgX2iZTWyT_OwV5rbrw" \
+--header "X-GitHub-Api-Version: 2022-11-28"
+
+curl --request GET \
+--url "https://api.github.com/app" \
+--header "Accept: application/vnd.github+json" \
+--header "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTMzMzg3OTksImV4cCI6MTcxMzMzOTM5OSwiaXNzIjoiODc3NTQxIn0.XVHwZ4AudmDMuyv6sSX3M5V2dxpjMnbwbK_CMonJHE0zU-jXsMq991JcP7IHEcH_LIs8jAu4ZfVMosdCnVzJ3w-5My6O9z88rkM2zz0N2vChMO2v-Lbf67hlIonw9T65rzDIeh30qJg5swsfpDJfsFX95q2v_EIuadoIDEcRazZyQMboevdpK3pfZPVBJnyWC1h9DfDST0OHB4IHuTF2mYYU9bwXyGKNRvyO3AUjgg7OgMNd9tcS7KDBNZMoIhA4M24k_nBeSOyvwhnOPFx6oRFhQRRH0t-NFNA13m9Cze70glrGNRSAsaBIF37e5I5pwUZbgX2iZTWyT_OwV5rbrw" \
+--header "X-GitHub-Api-Version: 2022-11-28"

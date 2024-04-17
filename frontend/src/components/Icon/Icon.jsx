@@ -8,7 +8,8 @@ import DownArrow from '../../assets/Icons/DownArrow.svg';
 import Github from '../../assets/Icons/Github.svg';
 import Open from '../../assets/Icons/Open.svg';
 import Repo from '../../assets/Icons/Repo.svg';
-
+import Download from '../../assets/Icons/Download.svg';
+import Plus from '../../assets/Icons/Plus.svg';
 
 
 function Icon({dimension, type}){
@@ -20,7 +21,9 @@ function Icon({dimension, type}){
         "DownArrow": DownArrow,
         "Github": Github,
         "Open": Open,
-        "Repo": Repo
+        "Repo": Repo,
+        "Download": Download,
+        "Plus": Plus
     } 
     
     if(!icon[type]){
