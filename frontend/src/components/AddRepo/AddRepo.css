@@ -1,0 +1,54 @@
+.add-repo{
+    width:100%;
+    height:60px;
+    max-height: 60px;
+    border-bottom: 1px solid var(--border1);
+    display:flex;
+    padding:16px;
+    box-sizing: border-box;
+    display:flex;   
+    justify-content: space-between;
+    width:100%;
+    align-items: center;
+}
+
+.add-repo h2{
+    font-size: 16px;
+    color: var(--light-subtext);
+    font-family: var(--font2);
+    font-weight: normal;
+    margin: 0;
+    transform:translateY(-2px);
+}
+
+.add-repo p{
+    font-size: 12px;
+    color: var(--light-subtext);
+    font-family: var(--font2);
+    margin: 0;
+    line-height: 1.1;
+}
+
+.add-repo-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap:10px;
+}
+
+.add-repo-form{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.add-repo-form input{
+    width: 100%;
+    height: 30px;
+    color:var(--dark-subtext);
+    border: 1px solid var(--border1);
+    border-radius: 5px;
+    padding: 0 10px;
+    background-color: var(--bg);
+    box-sizing: border-box;
+}

@@ -7,6 +7,7 @@ import Footer from '../../components/Footer/Footer'
 import Icon from '../../components/Icon/Icon'
 import MiniForm from '../../components/MiniForm/MiniForm'
 import Repo from '../../components/Repo/Repo'
+import AddRepo from '../../components/AddRepo/AddRepo'
 
 function Home(){
     const [numRepos, setNumRepos] = useState(0)
@@ -34,6 +35,7 @@ function Home(){
                     </div>
                     <div className="repos">
                         <Repo/>
+                        <AddRepo/>
                     </div>
                 </div>
             </div>
