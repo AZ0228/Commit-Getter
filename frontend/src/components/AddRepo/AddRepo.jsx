@@ -3,7 +3,7 @@ import "./AddRepo.css";
 
 import Icon from "../Icon/Icon";
 
-function AddRepo({ }) {
+function AddRepo({handleSubmit}) {    
 
     return (
         <div className="add-repo">
