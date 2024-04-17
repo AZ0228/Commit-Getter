@@ -1,0 +1,44 @@
+.mini-form{
+    height:25px;
+    width:auto;   
+    display:flex;    
+}
+
+
+
+.mini-form input{
+    padding:0 5px;
+    width:100px;
+    border-radius: 5px 0 0 5px;
+    outline:none;
+    height:100%;
+    border:none;
+    font-family:var(--font1);
+    font-size:12px;
+    font-weight:400;
+}
+
+.mini-form input::placeholder{
+    font-family:var(--font1);
+    font-weight:400;
+    font-size:12px;
+    color: var(--placeholder-text);
+}
+
+.mini-form button{
+    width:auto;
+    height:100%;
+    padding: 2px 8px;
+    border-radius: 0 5px 5px 0;
+    background-color: var(--purple);
+    border:none;
+    outline:none;
+    cursor:pointer;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    color:white;
+    font-family: var(--font-2);
+    font-weight:500;
+    font-size:12px;
+}

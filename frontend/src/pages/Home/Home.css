@@ -1,0 +1,72 @@
+.home{
+    height:100vh;
+    width:100%;
+    display:flex;
+    flex-direction: column;
+    background-color: var(--bg);
+}
+
+.content-container{
+    flex-grow:1;
+    width:100%;
+    height:auto;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.content{
+    max-width:1300px;
+    width:calc(80% - 60px);
+    margin: 0 30px;
+    height:70%;
+    border:1px solid var(--border1);
+    border-radius: 8px;
+    display:flex;
+    flex-direction: column;
+    overflow:hidden;
+}
+
+.content-header{
+    width:100%;
+    height:70px;
+    background-color: var(--accent);
+    border-bottom: 1px solid var(--border1);
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+.left{
+    display:flex;
+    align-items: center;
+    padding:0 20px;
+    gap:15px;
+}
+
+.right{
+    display:flex;
+    align-items: center;
+    padding:0 20px;
+    gap:15px;
+
+}
+
+.home .button{
+    background-color: var(--button-green);
+    color: var(--main-text);
+    padding:7px 13px;
+}
+
+
+/* website discord github 
+https://github.com/hack-rpi/Figma-Designs-2024
+https://github.com/hack-rpi/HackRPI-Mobile
+https://www.hackrpi.com/
+https://discord.gg/yqBPjUJnqK
+
+
+
+*/

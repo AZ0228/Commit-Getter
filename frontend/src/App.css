@@ -1,38 +1,52 @@
-.App {
-  text-align: center;
+:root{
+    --dark: #020409;
+    --bg: #0E1117;
+    --accent: #171B22;
+    --button-fill: #22262D;
+    --border1: #23272E;
+    --border2: #30363D;
+    --button-green: #3E8438;
+    --green: #3FB950;
+    --purple: #7344C3;
+    --blue: #4493F8;
+    --main-text: white;
+    --dark-subtext: #848D97;
+    --light-subtext: #656C76;
+    --placeholder-text: #656C76;
+    --insertions: #238636;
+    --deletions: #DA3633;
+
+    --font1: 'Mona Sans';
+    --font2: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+h1{
+    font-size:20px;
+    color: var(--maintext);
+    font-family:'Mona Sans';
+    font-weight: bold;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+body{
+    background-color: var(--bg);
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+button{
+    font-family: var(--font1);
+    outline:none;
+    border:none;
+    cursor:pointer;
+    border-radius: 6px;
+    font-size:13px;
 }
 
-.App-link {
-  color: #61dafb;
+button:active{
+    filter: brightness(0.8);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+button.secondary{
+    background-color: var(--button-fill);
+    color: var(--main-text);
+    padding: 5px 9px;
+    
 }

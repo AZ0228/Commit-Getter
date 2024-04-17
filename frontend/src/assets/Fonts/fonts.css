@@ -1,0 +1,17 @@
+@font-face {
+    font-family: 'Mona Sans';
+    font-weight: bold;
+    src: url(Mona\ Sans/MonaSans-Bold.otf);
+}
+
+@font-face {
+    font-family: 'Mona Sans';
+    font-weight: normal;
+    src: url(Mona\ Sans/MonaSans-Regular.otf);
+}
+
+@font-face {
+    font-family: 'Mona Sans';
+    font-weight: 500;
+    src: url(Mona\ Sans/MonaSans-SemiBold.otf);
+}
