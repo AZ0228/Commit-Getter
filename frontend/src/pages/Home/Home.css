@@ -6,6 +6,15 @@
     background-color: var(--bg);
 }
 
+.title{
+    margin:30px;
+}
+
+.title h1{
+    font-size:24px;
+    color: var(--main-text);
+}
+
 .content-container{
     flex-grow:1;
     width:100%;
@@ -36,7 +45,10 @@
     display:flex;
     justify-content: space-between;
     align-items: center;
+}
 
+.content-header .rs-input-group.rs-input-group-inside{
+    height:25px !important;
 }
 
 .left{
@@ -58,6 +70,7 @@
     background-color: var(--button-green);
     color: var(--main-text);
     padding:7px 13px;
+    border-radius: 5px;
 }
 
 .home .go{
@@ -66,6 +79,7 @@
     transition: 0.5s all;
     filter:brightness(0.5);
     pointer-events: none;
+    font-weight:bold;
 }
 
 .home .go.active{

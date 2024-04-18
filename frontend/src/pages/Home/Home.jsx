@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import './Home.css'
 import '../../assets/Fonts/fonts.css'
+import { useNavigate } from 'react-router-dom';
+import { DateRangePicker } from 'rsuite';
+import { FaCalendar } from 'react-icons/fa';
 
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
@@ -8,6 +11,9 @@ import Icon from '../../components/Icon/Icon'
 import MiniForm from '../../components/MiniForm/MiniForm'
 import Repo from '../../components/Repo/Repo'
 import AddRepo from '../../components/AddRepo/AddRepo'
+
+import Calendar from '../../assets/Icons/Calendar.svg';
+
 
 function Home() {
     const [username, setUsername] = useState('');
@@ -17,6 +23,8 @@ function Home() {
     const [repos, setRepos] = useState([]);
     const [jwt, setJwt] = useState('');
     const [showPopup, setShowPopup] = useState(null);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (username !== '' && jwt !== '' && repos.length > 0) {
@@ -59,6 +67,15 @@ function Home() {
     useEffect(() => {
         getToken().then(setJwt);
     }, []);
+
+    const getCommits = () => {
+        const info = {
+            username: username,
+            minChanges: minChanges,
+            repos: repos
+        }
+        navigate(`/commits?data=${encodeURIComponent(JSON.stringify(info))}`);
+    };
 
     async function getRepo(apiUrl) {
         // const apiUrl = `https://api.github.com/repos/${path}}`;
@@ -131,8 +148,8 @@ function Home() {
 
     return (
         <div className="home">
-            <Header />
             <div className="content-container">
+                <div className="title"><h1>Commit Getter</h1></div>
                 <div className="content">
                     <div className="content-header">
                         <div className="left">
@@ -141,7 +158,8 @@ function Home() {
                             <MiniForm placeholderText={"Min Changes"} buttonText={"Set"} value={minChanges} onSubmit={setMinChanges}/>
                         </div>
                         <div className="right">
-                            <button className={`button go ${ready ? "active": ""}`}>Get Commits</button>
+                            <DateRangePicker format="MM/dd/yyyy" character=" - " caretAs={FaCalendar}/>
+                            <button onClick={getCommits} className={`button go ${ready ? "active": ""}`}>Get Commits</button>
                         </div>
                     </div>
                     <div className="repos">
