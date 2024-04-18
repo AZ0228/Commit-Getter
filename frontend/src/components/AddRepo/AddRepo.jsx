@@ -17,6 +17,10 @@ function AddRepo({handleSubmitPath, handleSubmitLink}) {
 
     const onSubmit = (e) => {
         e.preventDefault();
+        //clear inputs
+        setPath('');
+        setLink('');
+
         if(path === ''){
             handleSubmitLink(link);
         } else {
@@ -37,6 +41,7 @@ function AddRepo({handleSubmitPath, handleSubmitLink}) {
                     placeholder="Repository Path"
                     className="add-repo-input"
                     onChange={onPathChange}
+                    value={path}
                 />
                 <p>or</p>
                 <input
@@ -44,6 +49,7 @@ function AddRepo({handleSubmitPath, handleSubmitLink}) {
                     placeholder="Repository Link"
                     className="add-repo-input"
                     onChange={onLinkChange}
+                    value={link}
                 />
                 <button type="submit" className="button">Add</button>
             </form>

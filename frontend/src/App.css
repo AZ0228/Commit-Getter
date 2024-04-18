@@ -15,6 +15,7 @@
     --placeholder-text: #656C76;
     --insertions: #238636;
     --deletions: #DA3633;
+    --popup: #161B22;
 
     --font1: 'Mona Sans';
     --font2: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";;
@@ -83,3 +84,25 @@ button.secondary{
     padding: 5px 9px;
     
 }
+
+/* scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--popup);
+    border-radius: 20px;
+
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border1);
+    border: 2px solid var(--popup);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--border2);
+}
+

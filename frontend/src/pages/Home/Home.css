@@ -25,7 +25,7 @@
     border-radius: 8px;
     display:flex;
     flex-direction: column;
-    overflow:hidden;
+    /* overflow:hidden; */
 }
 
 .content-header{

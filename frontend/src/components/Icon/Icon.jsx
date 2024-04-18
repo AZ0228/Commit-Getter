@@ -10,6 +10,8 @@ import Open from '../../assets/Icons/Open.svg';
 import Repo from '../../assets/Icons/Repo.svg';
 import Download from '../../assets/Icons/Download.svg';
 import Plus from '../../assets/Icons/Plus.svg';
+import Check1 from '../../assets/Icons/Check1.svg';
+import X from '../../assets/Icons/X.svg';
 
 
 function Icon({dimension, type}){
@@ -23,7 +25,9 @@ function Icon({dimension, type}){
         "Open": Open,
         "Repo": Repo,
         "Download": Download,
-        "Plus": Plus
+        "Plus": Plus,
+        "Check1": Check1,
+        "X": X
     } 
     
     if(!icon[type]){
