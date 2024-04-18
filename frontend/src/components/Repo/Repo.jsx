@@ -3,7 +3,7 @@ import './Repo.css';
 
 import Icon from '../Icon/Icon';
 
-function Repo({repo, num, showPopup, setShowPopup, handleBranchChange}){
+function Repo({repo, num, showPopup, setShowPopup, handleBranchChange, removeRepo}){
     return(
         <div className="repo">
             <div className="repo-header-left">
@@ -22,6 +22,9 @@ function Repo({repo, num, showPopup, setShowPopup, handleBranchChange}){
                     <Icon dimension={16} type={"Branch"} />
                     <p>{repo.branches[repo.chosenBranchIndex]}</p>
                     <Icon dimension={15} type={"DownArrow"}/>
+                </button>
+                <button className="delete" onClick={()=>{removeRepo(num)}}>
+                    <Icon dimension={16} type={"Trash"}/>
                 </button>
             </div>
             {num === showPopup && <div className="branches-popup">

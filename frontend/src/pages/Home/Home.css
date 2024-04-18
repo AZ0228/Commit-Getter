@@ -60,6 +60,47 @@
     padding:7px 13px;
 }
 
+.home .go{
+    background-color: var(--purple);
+    color: var(--main-text);
+    transition: 0.5s all;
+    filter:brightness(0.5);
+    pointer-events: none;
+}
+
+.home .go.active{
+    pointer-events: all;
+    filter:brightness(1);
+    background: var(--purple);
+    /* box-shadow: 0 0 7px var(--purple); */
+
+}
+
+.home .go.active:hover{
+    box-shadow: 0 0 5px var(--purple),
+                0 0 10px var(--purple),
+                0 0 20px var(--purple);
+
+}
+
+.repos{
+    width:100%;
+    flex-grow:1;
+    display:flex;
+    flex-direction: column;
+    gap:10px;
+    /* padding: 10px 0; */
+    overflow-y: scroll;
+    box-sizing: border-box;
+}
+
+@media screen and (max-width: 768px){
+    .content{
+        width:calc(100% - 20px);
+        margin: 0 10px;
+    }
+    
+}
 
 /* website discord github 
 https://github.com/hack-rpi/Figma-Designs-2024

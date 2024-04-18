@@ -10,9 +10,21 @@ import Repo from '../../components/Repo/Repo'
 import AddRepo from '../../components/AddRepo/AddRepo'
 
 function Home() {
+    const [username, setUsername] = useState('');
+    const [minChanges, setMinChanges] = useState('');
+    const [ready, setReady] = useState(false);
+
     const [repos, setRepos] = useState([]);
     const [jwt, setJwt] = useState('');
     const [showPopup, setShowPopup] = useState(null);
+
+    useEffect(() => {
+        if (username !== '' && jwt !== '' && repos.length > 0) {
+            setReady(true);
+        } else {
+            setReady(false);
+        }
+    }, [username, minChanges, ready, repos, jwt, showPopup]);
 
     async function getToken() {
         // Check if a token is stored and valid
@@ -125,19 +137,27 @@ function Home() {
                     <div className="content-header">
                         <div className="left">
                             <Icon dimension={30} type={"Github"} />
-                            <MiniForm placeholderText={"Username"} buttonText={"Set"} />
-                            <MiniForm placeholderText={"Min Changes"} buttonText={"Set"} />
+                            <MiniForm placeholderText={"Username"} buttonText={"Set"} value={username} onSubmit={setUsername}/>
+                            <MiniForm placeholderText={"Min Changes"} buttonText={"Set"} value={minChanges} onSubmit={setMinChanges}/>
                         </div>
                         <div className="right">
-                            <button className="button">Add Repo</button>
+                            <button className={`button go ${ready ? "active": ""}`}>Get Commits</button>
                         </div>
                     </div>
                     <div className="repos">
                         {repos.map((repo, index) => (
-                            <Repo key={index} num={index} repo={repo} showPopup={showPopup} setShowPopup={setShowPopup} handleBranchChange={changeBranch}/>
+                            <Repo 
+                                key={index} 
+                                num={index} 
+                                repo={repo} 
+                                showPopup={showPopup} 
+                                setShowPopup={setShowPopup} 
+                                handleBranchChange={changeBranch}
+                                removeRepo={removeRepo}
+                            />
                         ))}
-                        <AddRepo handleSubmitLink={handleSubmitLink} handleSubmitPath={handleSubmitPath} />
                     </div>
+                    <AddRepo handleSubmitLink={handleSubmitLink} handleSubmitPath={handleSubmitPath} />
                 </div>
             </div>
             <Footer />

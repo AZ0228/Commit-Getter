@@ -91,7 +91,7 @@ button.secondary{
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--popup);
+    background: var(--bg);
     border-radius: 20px;
 
 }

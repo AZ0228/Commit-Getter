@@ -13,10 +13,21 @@
     position: relative;
 }
 
+
 .repo-header-left{
     display:flex;
     gap:10px;
 
+}
+
+.repo-header-right{
+    display:flex;
+    gap:10px;
+    align-items: center;
+}
+
+.repo a:hover{
+    border-bottom: 2px solid var(--blue);
 }
 
 .repo-path{
@@ -147,3 +158,34 @@
     /* border-top: 1px solid var(--border1); */
 }
 
+
+.repo .delete{
+    display:flex;
+    background-color: var(--bg);
+    padding:5px;
+
+}
+
+.repo .delete:hover{
+    background-color: rgba(177, 186, 196, 0.12);
+}
+
+.branches::-webkit-scrollbar {
+    width: 10px;
+}
+
+.branches::-webkit-scrollbar-track {
+    background: var(--popup);
+    border-radius: 20px;
+
+}
+
+.branches::-webkit-scrollbar-thumb {
+    background: var(--border1);
+    border: 2px solid var(--popup);
+    border-radius: 10px;
+}
+
+.branches::-webkit-scrollbar-thumb:hover {
+    background: var(--border2);
+}

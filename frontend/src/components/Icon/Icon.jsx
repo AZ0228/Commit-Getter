@@ -12,6 +12,7 @@ import Download from '../../assets/Icons/Download.svg';
 import Plus from '../../assets/Icons/Plus.svg';
 import Check1 from '../../assets/Icons/Check1.svg';
 import X from '../../assets/Icons/X.svg';
+import Trash from '../../assets/Icons/Trash.svg';
 
 
 function Icon({dimension, type}){
@@ -27,7 +28,8 @@ function Icon({dimension, type}){
         "Download": Download,
         "Plus": Plus,
         "Check1": Check1,
-        "X": X
+        "X": X,
+        "Trash": Trash
     } 
     
     if(!icon[type]){
