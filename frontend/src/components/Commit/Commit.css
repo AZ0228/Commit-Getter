@@ -1,0 +1,13 @@
+.commit{
+    display:flex;
+    width:100%;
+    border-bottom: 1px solid var(--border1);
+    padding:15px;
+    box-sizing: border-box;
+    height:70px;
+    align-items: flex-start;
+}
+
+.commit h3{
+    font-weight:500;
+}

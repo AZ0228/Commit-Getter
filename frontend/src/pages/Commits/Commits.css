@@ -2,15 +2,138 @@
     height:100vh;
     display:flex;
     flex-direction:column;
+    align-items: flex-start;
+    justify-content: center;
+    overflow-x: hidden;
+    overflow:hidden;
+}
+
+.commits hr{
+    width:95%;
+    border: 1px solid var(--border1);
+    margin:0;
+    margin-top:5px;
+}
+
+p.separator{
+    width:95%;
+    text-align:left;
+    margin:10px 0;
+    color: var(--dark-subtext);
+    font-size: 12px;
+    font-family: var(--font1);
+    font-weight:200;
+    box-sizing: border-box;
+    padding-left:10px;
+    margin: 7px 0 0 0 ;
 }
 
 .container{
     display:flex;
-    height:100%;
+    height:calc(100% - 60px);
+    width:100%;
 }
 
 .commits .left{
     width:250px;
     height:100%;
     border-right: 1px solid var(--border1);
+    align-items: center;
+    justify-content: flex-start;
+    display: flex;
+    flex-direction: column;
+    padding:15px;
+    gap:5px;
+}
+
+.commits .left h2{
+    width:100%;
+    font-size:20px;
+}
+
+.commit-repo{
+    display:flex;
+    width:100%;
+    height:60px;
+    color: var(--main-text);
+}
+
+.commits .option{
+    display:flex;
+    align-items: flex-start;
+    padding: 10px 20px;
+    width:100%;
+    box-sizing: border-box;
+    border-radius: 7px;
+    cursor:pointer;
+    position: relative;
+}
+
+.commits .option h3{
+    font-weight:normal;
+}
+
+.commits .option:hover{
+    background-color: var(--commit-repo-hover);
+}
+
+.commits .option.selected{
+    background-color: var(--commit-repo-hover);
+}
+
+.commits .option.selected:before{
+    content:'';
+    position: absolute;
+    left:-7px;
+    top:20%;
+    height:60%;
+    width: 4px;
+    background-color: var(--blue);
+    border-radius: 2px;;
+}
+
+.commits .right{
+    flex-direction: column;
+    flex-grow: 1;
+    align-items: flex-start;
+    padding:30px;
+    box-sizing: border-box;
+}
+
+.commits .right h1{
+    font-size:24px;
+    margin:0;
+    line-height: 1;
+}
+
+.commits-list{
+    width:100%;
+    height:70%;
+    border:1px solid var(--border1);
+    border-radius: 8px;
+    display:flex;
+    flex-direction: column;
+    position: relative;
+    overflow:hidden;
+    flex-grow:1;
+}
+
+.commits-content{
+    overflow-y:scroll;
+    overflow-x:hidden;
+    height:100%;
+}
+
+.commit-right-subheader h2{
+    font-weight:normal;
+    color: var(--dark-subtext);
+    font-size:14px;
+}
+
+.commits-list-header{
+    padding:20px;
+    display:flex;
+    width:100%;
+    box-sizing: border-box;
+    background-color: var(--accent);
 }

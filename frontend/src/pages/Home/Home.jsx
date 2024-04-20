@@ -20,6 +20,9 @@ function Home() {
     const [minChanges, setMinChanges] = useState('');
     const [ready, setReady] = useState(false);
 
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+
     const [repos, setRepos] = useState([]);
     const [jwt, setJwt] = useState('');
     const [showPopup, setShowPopup] = useState(null);
@@ -72,6 +75,8 @@ function Home() {
         const info = {
             username: username,
             minChanges: minChanges,
+            startDate: startDate,
+            endDate: endDate,
             repos: repos
         }
         navigate(`/commits?data=${encodeURIComponent(JSON.stringify(info))}`);
@@ -146,6 +151,15 @@ function Home() {
         getRepo(link);
     }
 
+    const handleDate = (date) =>{
+        if(date.length === 2){
+            setStartDate(date[0].toISOString());
+            setEndDate(date[1].toISOString());
+            console.log(date[0].toISOString());
+            console.log(date[1].toISOString());
+        }
+    } 
+
     return (
         <div className="home">
             <div className="content-container">
@@ -158,7 +172,14 @@ function Home() {
                             <MiniForm placeholderText={"Min Changes"} buttonText={"Set"} value={minChanges} onSubmit={setMinChanges}/>
                         </div>
                         <div className="right">
-                            <DateRangePicker format="MM/dd/yyyy" character=" - " caretAs={FaCalendar}/>
+                            <DateRangePicker 
+                                format="MM/dd/yyyy" 
+                                character=" - " 
+                                caretAs={FaCalendar} 
+                                showOneCalendar  
+                                placeholder="Select Date Range"
+                                onOk={handleDate}
+                            />
                             <button onClick={getCommits} className={`button go ${ready ? "active": ""}`}>Get Commits</button>
                         </div>
                     </div>
