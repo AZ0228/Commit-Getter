@@ -29,12 +29,12 @@
     max-width:980px;
     width:calc(80% - 60px);
     margin: 0 30px;
-    height:70%;
+    height:80%;
     border:1px solid var(--border1);
     border-radius: 8px;
     display:flex;
     flex-direction: column;
-    /* overflow:hidden; */
+    overflow:hidden;
 }
 
 .content-header{
@@ -113,6 +113,22 @@
     box-sizing: border-box;
 }
 
+.empty-repo{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    height:100%;
+    font-size: 14px;
+    color: var(--dark-subtext);
+
+}
+
+.empty-repo h2{
+    font-size: 16px;
+    color: var(--dark-subtext);
+    font-weight: normal;
+}
+
 @media screen and (max-width: 768px){
     .content{
         width:calc(100% - 20px);
@@ -120,6 +136,7 @@
     }
     
 }
+
 
 /* website discord github 
 https://github.com/hack-rpi/Figma-Designs-2024

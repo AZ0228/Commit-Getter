@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import './Home.css'
 import '../../assets/Fonts/fonts.css'
 import { useNavigate } from 'react-router-dom';
@@ -13,11 +13,12 @@ import Repo from '../../components/Repo/Repo'
 import AddRepo from '../../components/AddRepo/AddRepo'
 
 import Calendar from '../../assets/Icons/Calendar.svg';
+import { set } from 'rsuite/esm/utils/dateUtils';
 
 
 function Home() {
     const [username, setUsername] = useState('');
-    const [minChanges, setMinChanges] = useState(null);
+    const [minChanges, setMinChanges] = useState('');
     const [ready, setReady] = useState(false);
 
     const [startDate, setStartDate] = useState(null);
@@ -27,7 +28,10 @@ function Home() {
     const [jwt, setJwt] = useState('');
     const [showPopup, setShowPopup] = useState(null);
 
+    const [addRepoError, setAddRepoError] = useState('');
     const navigate = useNavigate();
+
+
 
     useEffect(() => {
         if (username !== '' && jwt !== '' && repos.length > 0) {
@@ -95,7 +99,6 @@ function Home() {
                 throw new Error(`HTTP error! Status: ${repoResponse.status}`);  // Throws an error on non-200 responses
             }
             const repoData = await repoResponse.json();
-            console.log(repoData);
             let repo = {
                 path: repoData.full_name,
                 branches: [],
@@ -122,6 +125,7 @@ function Home() {
             }
             setRepos([...repos, repo]);
         } catch(error){
+            setAddRepoError('Error fetching repository');
             console.error('Error:', error);
         }
     }
@@ -130,6 +134,7 @@ function Home() {
         //checking to see if already fetched
         for(let i = 0; i < repos.length; i++){
             if(repos[i].link === link){
+                setAddRepoError('Repository already added');
                 return;
             }
         }
@@ -144,6 +149,7 @@ function Home() {
         //checking to see if already fetched
         for(let i = 0; i < repos.length; i++){
             if(repos[i].path === path){
+                setAddRepoError('Repository already added');
                 return;
             }
         }
@@ -184,19 +190,26 @@ function Home() {
                         </div>
                     </div>
                     <div className="repos">
-                        {repos.map((repo, index) => (
-                            <Repo 
-                                key={index} 
-                                num={index} 
-                                repo={repo} 
-                                showPopup={showPopup} 
-                                setShowPopup={setShowPopup} 
-                                handleBranchChange={changeBranch}
-                                removeRepo={removeRepo}
-                            />
-                        ))}
+                        {repos.length > 0 ?
+                            repos.map((repo, index) => (
+                                <Repo 
+                                    key={index} 
+                                    num={index} 
+                                    repo={repo} 
+                                    showPopup={showPopup} 
+                                    setShowPopup={setShowPopup} 
+                                    handleBranchChange={changeBranch}
+                                    removeRepo={removeRepo}
+                                />
+                            ))
+                            :
+                            <div className="empty-repo">
+                                <h2>Add Repositories below with either repository link or path (ex: "username/repo")</h2>
+                            </div>
+
+                        }
                     </div>
-                    <AddRepo handleSubmitLink={handleSubmitLink} handleSubmitPath={handleSubmitPath} />
+                    <AddRepo handleSubmitLink={handleSubmitLink} handleSubmitPath={handleSubmitPath} error={addRepoError} setError={setAddRepoError} />
                 </div>
             </div>
             <Footer />

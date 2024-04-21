@@ -2,12 +2,94 @@
     display:flex;
     width:100%;
     border-bottom: 1px solid var(--border1);
-    padding:15px;
+    padding:15px 15px 15px 20px;
     box-sizing: border-box;
     height:70px;
     align-items: flex-start;
+    justify-content: space-between;
+    gap:10px;
+}
+
+.commit-left{
+    display:flex;
+    gap:10px;
+
+}
+
+.commit-right{
+    display:flex;
+    gap:10px;
+    align-items: center;
+    height:100%;
+    box-sizing: border-box;
+}
+
+.commit-right a{
+    border-radius: 5px;
+    text-decoration: none;
+    padding:5px;
+}
+
+.commit-right a:hover{
+    background-color: var(--button-fill);
+}
+
+.commit-right h3{
+    font-size:13px;
+    color:var(--dark-subtext);
+    font-weight:500;
+}
+
+.commit-right hr{
+    width:1px;
+    height:20px;
+    background-color: var(--dark-subtext);
+    margin:0;
+}
+
+.commit-header{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.subheading{
+    display:flex;
+    align-items: center;
+}
+
+.commit-header p{
+    font-size:13px;
+    color:var(--dark-subtext);
+    font-weight:500;
 }
 
 .commit h3{
     font-weight:500;
+}
+
+.commit .diff{
+    display:flex;
+}
+
+.deletion{
+    height:10px;
+    width:10px;
+    background-color: var(--deletions);
+    margin-right:3px;
+}
+
+.insertion{
+    height:10px;
+    width:10px;
+    background-color: var(--insertions);
+    margin-right:3px;
+    margin-left:8px;
+}
+
+.diff{
+    display:flex;
+    align-items: center;
+    margin-right:10px;
+    margin-left:10px;
 }
