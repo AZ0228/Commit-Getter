@@ -3,7 +3,7 @@ import "./AddRepo.css";
 
 import Icon from "../Icon/Icon";
 
-function AddRepo({handleSubmitPath, handleSubmitLink}) {    
+function AddRepo({handleSubmitPath, handleSubmitLink, error, setError}) {    
     const [path, setPath] = useState('');
     const [link, setLink] = useState('');
 
@@ -17,6 +17,7 @@ function AddRepo({handleSubmitPath, handleSubmitLink}) {
 
     const onSubmit = (e) => {
         e.preventDefault();
+        setError('');
         //clear inputs
         setPath('');
         setLink('');
@@ -29,6 +30,7 @@ function AddRepo({handleSubmitPath, handleSubmitLink}) {
     }
 
 
+
     return (
         <div className="add-repo">
             <div className="add-repo-header">
@@ -36,6 +38,9 @@ function AddRepo({handleSubmitPath, handleSubmitLink}) {
                 <h2>Add Repository</h2>
             </div>
             <form className="add-repo-form" onSubmit={onSubmit}>
+                <div className="error">
+                    <p >{error}</p>
+                </div>
                 <input
                     type="text"
                     placeholder="Repository Path"

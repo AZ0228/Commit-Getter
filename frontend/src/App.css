@@ -66,6 +66,9 @@ a{
     font-family: var(--font2);
     text-decoration: none;
     cursor: pointer;
+    display:flex;
+    align-items: center;
+    gap:5px;
 }
 
 body{
@@ -113,3 +116,8 @@ button.secondary{
     background: var(--border2);
 }
 
+.flex{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}

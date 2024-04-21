@@ -58,3 +58,12 @@
     outline: none;
     border: 1px solid var(--border1);
 }
+
+.add-repo .error p{
+    color: var(--deletions);
+    font-size: 12px;
+    font-family: var(--font2);
+    margin: 0;
+    padding: 0;
+    width:150px;
+}

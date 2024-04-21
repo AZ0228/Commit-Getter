@@ -9,8 +9,6 @@ function MiniForm({placeholderText, buttonText, value, onSubmit}){
         setInputValue(e.target.value);
     }
 
-    console.log(value);
-
     useEffect(() => {
         if(value === ''){
             setEditing(true);
@@ -27,7 +25,7 @@ function MiniForm({placeholderText, buttonText, value, onSubmit}){
 
     return(
         <div className="mini-form">
-            {editing ? 
+            {editing && value === '' ? 
                 <form className="mini-form" onSubmit={handleSubmit}>
                     <input type="text" placeholder={placeholderText} value={inputValue} onChange={handleChange}/>
                     <button type="submit">{buttonText}</button>
