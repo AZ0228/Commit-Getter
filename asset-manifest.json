@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/Commit-Getter/static/css/main.40ae43c4.css",
-    "main.js": "/Commit-Getter/static/js/main.e5119ea9.js",
+    "main.js": "/Commit-Getter/static/js/main.db4649cb.js",
     "static/js/453.d855a71b.chunk.js": "/Commit-Getter/static/js/453.d855a71b.chunk.js",
     "static/media/MonaSans-SemiBold.otf": "/Commit-Getter/static/media/MonaSans-SemiBold.4c983c6e4b50697b02f9.otf",
     "static/media/MonaSans-Bold.otf": "/Commit-Getter/static/media/MonaSans-Bold.412c338ef0b9822bfa78.otf",
@@ -23,11 +23,11 @@
     "static/media/Check1.svg": "/Commit-Getter/static/media/Check1.47573fa26648c23b7d12c1262f312465.svg",
     "static/media/Loading.svg": "/Commit-Getter/static/media/Loading.0ecaa0665e91865ea747e08f3452cddc.svg",
     "main.40ae43c4.css.map": "/Commit-Getter/static/css/main.40ae43c4.css.map",
-    "main.e5119ea9.js.map": "/Commit-Getter/static/js/main.e5119ea9.js.map",
+    "main.db4649cb.js.map": "/Commit-Getter/static/js/main.db4649cb.js.map",
     "453.d855a71b.chunk.js.map": "/Commit-Getter/static/js/453.d855a71b.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.40ae43c4.css",
-    "static/js/main.e5119ea9.js"
+    "static/js/main.db4649cb.js"
   ]
 }
