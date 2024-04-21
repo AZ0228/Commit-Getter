@@ -1,10 +1,9 @@
 .mini-form{
     height:25px;
+    max-height: 25px;
     width:auto;   
     display:flex;    
 }
-
-
 
 .mini-form input{
     padding:0 5px;
@@ -41,4 +40,18 @@
     font-family: var(--font-2);
     font-weight:500;
     font-size:12px;
+}
+
+.set{
+    height:25px;
+    width:auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--purple);
+    padding: 5px 10px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
 }

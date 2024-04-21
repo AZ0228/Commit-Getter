@@ -5,11 +5,11 @@
     padding: 0.3rem 2rem;
     background-color: var(--dark);
     border-bottom: 1px solid var(--border1);
-    height:64px;
+    height:60px;
+    width:100%;
+    box-sizing: border-box;
 }
 
 .header-content{
     width:100%;
-    max-width:1300px;
-
 }

@@ -3,31 +3,53 @@ import './Repo.css';
 
 import Icon from '../Icon/Icon';
 
-function Repo({}){
-
-    const repo = {
-        "path": "AZ0228/Study-Compass",
-        "branches": ["main", "dev"],
-        "commits": 5,
-        "lastCommit": "2 days ago"  
-
-    }
+function Repo({repo, num, showPopup, setShowPopup, handleBranchChange, removeRepo}){
     return(
         <div className="repo">
             <div className="repo-header-left">
                 <Icon dimension={20} type={"Repo"} />
-                <a className="repo-path" href={`https://github.com/${repo.path}`}>
+                <a className="repo-path" href={repo.link}>
                     <h2>{repo["path"].split('/')[0]}/</h2>
                     <h3>{repo["path"].split('/')[1]}</h3>
                 </a>
             </div>
             <div className="repo-header-right">
-                <button className="secondary">
+                <button 
+                    className="secondary" 
+                    onClick={()=>{setShowPopup(num === showPopup ? null : num)}}
+                    style={num === showPopup ? {backgroundColor: "#31363E"}: null}
+                >
                     <Icon dimension={16} type={"Branch"} />
-                    <p>main</p>
+                    <p>{repo.branches[repo.chosenBranchIndex]}</p>
                     <Icon dimension={15} type={"DownArrow"}/>
                 </button>
+                <button className="delete" onClick={()=>{removeRepo(num)}}>
+                    <Icon dimension={16} type={"Trash"}/>
+                </button>
             </div>
+            {num === showPopup && <div className="branches-popup">
+                <div className="branches-header">
+                    <h3>Switch branches</h3>
+                    <button onClick={()=>{setShowPopup(null)}}>
+                        <Icon dimension={13} type={"X"}/>
+                    </button>
+                </div>
+                <div className="branches">
+                    {repo.branches.map((branch, index) => (
+                        <div className="branch-container" key={`${index}${branch}`} onClick={()=>{handleBranchChange(num,index); setShowPopup(null)}}>
+                            {branch === repo.branches[repo.chosenBranchIndex] && 
+                                <div className="check">
+                                    <Icon dimension={14} type={"Check1"} />
+                                </div>
+                            }
+                            <div className="branch" >
+                                <p>{branch}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+                <div className="branches-footer"></div>
+            </div>}
         </div>
     )
 }
