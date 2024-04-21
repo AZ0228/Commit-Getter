@@ -11,7 +11,7 @@ function App() {
     return (
     <Router>
         <Routes>
-            <Route path="/" element={<Home/>}/>
+            <Route path="/" exact element={<Home/>}/>
             <Route path="/commits" element={<Commits/>}/>
         </Routes>
     </Router>
