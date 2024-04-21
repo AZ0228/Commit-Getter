@@ -25,7 +25,7 @@ function MiniForm({placeholderText, buttonText, value, onSubmit}){
 
     return(
         <div className="mini-form">
-            {editing && value === '' ? 
+            {editing ? 
                 <form className="mini-form" onSubmit={handleSubmit}>
                     <input type="text" placeholder={placeholderText} value={inputValue} onChange={handleChange}/>
                     <button type="submit">{buttonText}</button>
