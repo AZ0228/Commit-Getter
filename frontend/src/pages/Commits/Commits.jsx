@@ -15,7 +15,9 @@ function Commits(){
     const [selected, setSelected] = useState(0);
 
 
-    const [repoData, setRepoData] = useState([]);
+    const [repoData, setRepoData] = useState([[]]);
+
+    const [fetchedData, setFetchedData] = useState(false);
 
 
     const location = useLocation();
@@ -34,21 +36,47 @@ function Commits(){
     const [startDate, setStartDate] = useState(parsedData.startDate);
     const [endDate, setEndDate] = useState(parsedData.endDate);
 
+    useEffect(() => {
+        //populating repoData with empty arrays
+        setRepoData(new Array(repos.length).fill([]));
+    },[repos]);
+
+    async function getRateLimitStatus(jwt) {
+        try {
+            const url = 'https://api.github.com/rate_limit';
+            const headers = {
+                'Authorization': `Bearer ${jwt}`,
+                'Accept': 'application/vnd.github.v3+json'
+            };
+            const response = await fetch(url, { headers });
+            console.log(response.data);
+        } catch (error) {
+            console.error('Error fetching rate limit status:', error.message);
+        }
+    }
+
+    // useEffect(() => {
+    //     if (jwt) {
+    //         getRateLimitStatus(jwt);
+    //     }
+    // }, [jwt]);
+
+
     async function getToken() {
         // Check if a token is stored and valid
         let token = sessionStorage.getItem('jwtToken');
         let expiry = sessionStorage.getItem('jwtExpiry');
 
-        if (!token || !expiry || Date.now() >= expiry) {
+        // if (!token || !expiry || Date.now() >= expiry) {
             const response = await fetch('https://ig9px9v0hk.execute-api.us-east-1.amazonaws.com/CreateJWT');
             const data = await response.json();
-            token = data.token;
+            token = data.access_token;
             const now = Date.now();
             const exp = now + (10 * 60 * 1000) - (30 * 1000); // Set expiry 30 seconds before actual expiry
 
             sessionStorage.setItem('jwtToken', token);
             sessionStorage.setItem('jwtExpiry', exp);
-        }
+        // }
         return token;
     }
 
@@ -56,39 +84,106 @@ function Commits(){
         getToken().then(setJwt);
     }, []);
 
-    useEffect(() => {
-        console.log(repoData);
-    },[repoData]);
+    async function fetchAllCommits(url) {
+        if(jwt === ''){
+            return;
+        }
+        setFetchedData(true);
+        let results = [];
+        while(url){
+            const response = await fetch(url, {
+                headers: {
+                    'Authorization': `Bearer ${jwt}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const data = await response.json();
+            results = results.concat(data);  // Add new commits to the results array
 
+            const limit = response.headers.get('X-RateLimit-Limit');
+            const remaining = response.headers.get('X-RateLimit-Remaining');
+            // console.log(`Rate limit: ${remaining}/${limit}`);
 
+            const links = response.headers.get('Link');
+            if (links) {
+                const nextLink = links.split(',').find(s => s.includes('rel="next"'));
+                url = nextLink ? nextLink.split(';')[0].trim().slice(1, -1) : null;
+                // console.log('Next URL:', url);  // Log the next URL
+            } else {
+                url = null;  // Ensure URL is null if no links header is present
+            }        
+            if(data.length < 100){
+                break;
+            }
+        }
+        console.log(results);
+        return results;
+    }
 
     async function fetchCommits() {
         if(jwt === ''){
             return;
         }
+        if(fetchedData){
+            return;
+        } else {
+            setFetchedData(true);
+        }
+        console.log("fetching");
         for (let i = 0; i < repos.length; i++) {
             const repo = repos[i];
-            const url = `https://api.github.com/repos/${repo.path}/commits?sha=${repo.branches[repo.chosenBranchIndex]}&since=${startDate}&until=${endDate}&author=${username}&per_page=200`;
-            const commitResponse = await fetch(url, {
-                headers: {
-                    'Authorization': `${jwt}`,
-                    'Accept': 'application/vnd.github.v3+json'
+            const url = `https://api.github.com/repos/${repo.path}/commits?sha=${repo.branches[repo.chosenBranchIndex]}&since=${startDate}&until=${endDate}&author=${username}&per_page=100`;
+            let commitResponse = await fetchAllCommits(url);
+            //determining if the commit meets the minChanges requirement
+            if (minChanges) {
+                // const filteredCommits = [];
+                for (let commit of commitResponse) {
+                    const commitUrl = `https://api.github.com/repos/${repo.path}/commits/${commit.sha}`;
+                    const detailResponse = await fetch(commitUrl, {
+                        headers: {
+                            'Authorization': `Bearer ${jwt}`,
+                            'Accept': 'application/vnd.github+json'
+                        }
+                    });
+                    if (!detailResponse.ok) {
+                        throw new Error(`HTTP error! Status: ${detailResponse.status}`);
+                    }
+                    const commitData = await detailResponse.json();
+                    if (commitData.stats.total >= minChanges) {
+                        setRepoData(prev => {
+                            if (i < 0 || i >= prev.length) {
+                                console.error("List index out of bounds");
+                                return prev;
+                            }
+                            return prev.map((list, index) => {
+                                if (index === i) {
+                                    return [...list, commitData];
+                                }
+                                return list;
+                            });
+                        });
+                    }
                 }
-            });
-            if (!commitResponse.ok) {
-                throw new Error(`HTTP error! Status: ${commitResponse.status}`);  // Throws an error on non-200 responses
+                // commitResponse = filteredCommits; // Replace the original commits array with filtered commits
+            } else {
+                setRepoData(prev => [...prev, commitResponse]);
             }
-            const commitData = await commitResponse.json();
-            setRepoData(prev => [...prev, commitData]);
-            console.log(commitData);
+            // console.log(commitData);
         }
-
+    //https://api.github.com/repos/AZ0228/Study-Compass/commits/9257742d295631a365cdf8b42b1197b5aaf09f4e
     }
+
     useEffect(() => {
         // let url = 'https://api.github.com/repos/{repo}/commits?sha={branch}&since={start_date}T00:00:00Z&until={end_date}T23:59:59Z&author={username}'
         fetchCommits();
-        console.log(repos);
-    }, [username, minChanges, repos, startDate, endDate, jwt]);
+        // console.log(repos);
+
+    }, [jwt]);
+
+    useEffect(() => {console.log(repoData)}, [repoData]);
 
     const handleRepoClick = (index) => {
         if(index === 0){
@@ -132,15 +227,14 @@ function Commits(){
                             { selected === 0 ?
                                 repoData.map((repo, index) => (
                                     repo.map((commit, index) => (
-                                        <Commit commit={commit} key={`${index}${commit}`}/>
+                                        <Commit commit={commit} key={`${commit.sha}`}/>
                                     ))
                                 ))
                                 :
                                 repoData[selected-1].map((commit, index) => (
-                                    <Commit commit={commit} key={`${index}${commit}`}/>
+                                    <Commit commit={commit} key={`${commit.sha}`}/>
                                 ))
                             }
-                            {repoData.length !== 0 ? <Commit commit={repoData[0][0]}/>: null}
                         </div>
 
                     </div>

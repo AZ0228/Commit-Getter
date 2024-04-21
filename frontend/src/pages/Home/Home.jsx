@@ -17,7 +17,7 @@ import Calendar from '../../assets/Icons/Calendar.svg';
 
 function Home() {
     const [username, setUsername] = useState('');
-    const [minChanges, setMinChanges] = useState('');
+    const [minChanges, setMinChanges] = useState(null);
     const [ready, setReady] = useState(false);
 
     const [startDate, setStartDate] = useState(null);
