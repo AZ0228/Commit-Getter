@@ -189,13 +189,13 @@ function Commits(){
                     setInsertionsAverage(prev => (prev + commitData.stats.additions));
                     setDeletionsAverage(prev => (prev + commitData.stats.deletions));
                 }
-                setFetching(false);
                 // commitResponse = filteredCommits; // Replace the original commits array with filtered commits
-            // } else {
-            //     setRepoData(prev => [...prev, commitResponse]);
-            // }
-            // console.log(commitData);
-        }
+                // } else {
+                    //     setRepoData(prev => [...prev, commitResponse]);
+                    // }
+                    // console.log(commitData);
+            }
+        setFetching(false);
     //https://api.github.com/repos/AZ0228/Study-Compass/commits/9257742d295631a365cdf8b42b1197b5aaf09f4e
     }
 
