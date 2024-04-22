@@ -153,7 +153,7 @@ function Commits(){
         console.log("fetching");
         for (let i = 0; i < repos.length; i++) {
             const repo = repos[i];
-            const url = `https://api.github.com/repos/${repo.path}/commits?sha=${repo.branches[repo.chosenBranchIndex]}&since=${startDate}&until=${endDate}&author=${username}&per_page=100`;
+            const url = `https://api.github.com/repos/${repo.path}/commits?sha=${repo.branch}&since=${startDate}&until=${endDate}&author=${username}&per_page=100`;
             let commitResponse = await fetchAllCommits(url);
             //determining if the commit meets the minChanges requirement
             // if (minChanges) {
