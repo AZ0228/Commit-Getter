@@ -13,3 +13,7 @@
 .header-content{
     width:100%;
 }
+
+.header-content h1{
+    cursor: pointer;
+}
