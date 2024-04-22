@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/Commit-Getter/static/css/main.744296cc.css",
-    "main.js": "/Commit-Getter/static/js/main.983c6c31.js",
+    "main.js": "/Commit-Getter/static/js/main.a367d6f5.js",
     "static/js/453.d855a71b.chunk.js": "/Commit-Getter/static/js/453.d855a71b.chunk.js",
     "static/media/MonaSans-SemiBold.otf": "/Commit-Getter/static/media/MonaSans-SemiBold.4c983c6e4b50697b02f9.otf",
     "static/media/MonaSans-Bold.otf": "/Commit-Getter/static/media/MonaSans-Bold.412c338ef0b9822bfa78.otf",
@@ -9,25 +9,25 @@
     "static/media/Branch.svg": "/Commit-Getter/static/media/Branch.7a41d66a2afd21269620714e48503ced.svg",
     "static/media/logo.svg": "/Commit-Getter/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
     "static/media/Repo.svg": "/Commit-Getter/static/media/Repo.1cce85be18e2f629767d104d24cc7306.svg",
-    "static/media/Download.svg": "/Commit-Getter/static/media/Download.2327a6e220671124427b8a57111144ca.svg",
+    "static/media/Download.svg": "/Commit-Getter/static/media/Download.36dd3e170c5ce368003b88b9ae8f844a.svg",
     "static/media/Copy.svg": "/Commit-Getter/static/media/Copy.87e9ff75c5f940a18114d83946d357db.svg",
     "static/media/Github.svg": "/Commit-Getter/static/media/Github.26a8aa0be0003e4f9a201dd1f14e5f52.svg",
-    "static/media/X.svg": "/Commit-Getter/static/media/X.3ce9e0da771e7d7efaa856d832664e46.svg",
+    "static/media/X.svg": "/Commit-Getter/static/media/X.382caaa782ff4c9a7d7633f216aef01d.svg",
     "static/media/Check.svg": "/Commit-Getter/static/media/Check.c929c50dff28ee3b01ce81de3e26db65.svg",
     "static/media/Calendar.svg": "/Commit-Getter/static/media/Calendar.fe35cdbf6d85218ec6e39d4380b7aa5e.svg",
-    "static/media/Trash.svg": "/Commit-Getter/static/media/Trash.437128ac3f15037c24361c26555f6337.svg",
+    "static/media/Trash.svg": "/Commit-Getter/static/media/Trash.5aca18b8af1b744f437c2f21006540f9.svg",
     "static/media/Open.svg": "/Commit-Getter/static/media/Open.91c6562143c87d3e4ed99f6ef1ab95e5.svg",
-    "static/media/Plus.svg": "/Commit-Getter/static/media/Plus.f2577b37e7aafedff72b504aaad10857.svg",
+    "static/media/Plus.svg": "/Commit-Getter/static/media/Plus.c4d5cb6df3fdd82072ada824763ca82a.svg",
     "static/media/DownArrow.svg": "/Commit-Getter/static/media/DownArrow.186dbfef5396ecf5eea37aefbe3bf3e3.svg",
     "index.html": "/Commit-Getter/index.html",
-    "static/media/Check1.svg": "/Commit-Getter/static/media/Check1.47573fa26648c23b7d12c1262f312465.svg",
-    "static/media/Loading.svg": "/Commit-Getter/static/media/Loading.0ecaa0665e91865ea747e08f3452cddc.svg",
+    "static/media/Check1.svg": "/Commit-Getter/static/media/Check1.56c2a1cb442e03a3994c7218015ffab3.svg",
+    "static/media/Loading.svg": "/Commit-Getter/static/media/Loading.d39504930497903e9b09c5f4709fa0a9.svg",
     "main.744296cc.css.map": "/Commit-Getter/static/css/main.744296cc.css.map",
-    "main.983c6c31.js.map": "/Commit-Getter/static/js/main.983c6c31.js.map",
+    "main.a367d6f5.js.map": "/Commit-Getter/static/js/main.a367d6f5.js.map",
     "453.d855a71b.chunk.js.map": "/Commit-Getter/static/js/453.d855a71b.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.744296cc.css",
-    "static/js/main.983c6c31.js"
+    "static/js/main.a367d6f5.js"
   ]
 }
