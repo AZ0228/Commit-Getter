@@ -24,6 +24,7 @@ function Commits(){
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const commitData = queryParams.get('data');
+
     let parsedData = {};
     try {
         parsedData = JSON.parse(commitData);
@@ -153,7 +154,10 @@ function Commits(){
         console.log("fetching");
         for (let i = 0; i < repos.length; i++) {
             const repo = repos[i];
-            const url = `https://api.github.com/repos/${repo.path}/commits?sha=${repo.branch}&since=${startDate}&until=${endDate}&author=${username}&per_page=100`;
+            let url = `https://api.github.com/repos/${repo.path}/commits?sha=${repo.branch}&since=${startDate}&until=${endDate}&author=${username}&per_page=100`;
+            if(!startDate || !endDate){
+                url = `https://api.github.com/repos/${repo.path}/commits?sha=${repo.branch}&author=${username}&per_page=100`;
+            }
             let commitResponse = await fetchAllCommits(url);
             //determining if the commit meets the minChanges requirement
             // if (minChanges) {
@@ -240,7 +244,11 @@ function Commits(){
                         <h1>{selected === 0 ? "Commits" : repos[selected-1].path}</h1>
                     </div>
                     <div className="commit-right-subheader">
-                        <h2>{selected === 0 ? "showing all commits" : "showing select commits"} from {new Date(startDate).toLocaleDateString()} to {new Date(endDate).toLocaleDateString() } </h2>
+                        {startDate && endDate ?<h2>{selected === 0 ? "showing all commits" : "showing select commits"} from {new Date(startDate).toLocaleDateString()} to {new Date(endDate).toLocaleDateString() } </h2>
+                         : 
+                         <h2>{selected === 0 ? "showing all commits" : "showing select commits"}</h2>
+                        }
+                        
                     </div>
                     <div className="commits-list">
                         <div className="commits-list-header">
