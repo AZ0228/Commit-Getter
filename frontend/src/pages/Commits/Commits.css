@@ -124,6 +124,10 @@ p.separator{
     height:100%;
 }
 
+.commit-right-subheader{
+    display:flex;
+}
+
 .commit-right-subheader h2{
     font-weight:normal;
     color: var(--dark-subtext);

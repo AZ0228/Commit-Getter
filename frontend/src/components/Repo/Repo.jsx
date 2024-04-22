@@ -3,7 +3,7 @@ import './Repo.css';
 
 import Icon from '../Icon/Icon';
 
-function Repo({repo, num, showPopup, setShowPopup, handleBranchChange, removeRepo}){
+function Repo({repo, num, showPopup, setShowPopup, handleBranchChange, removeRepo, setIgnoreMerge}){
     return(
         <div className="repo">
             <div className="repo-header-left">
@@ -14,6 +14,8 @@ function Repo({repo, num, showPopup, setShowPopup, handleBranchChange, removeRep
                 </a>
             </div>
             <div className="repo-header-right">
+                <input type="checkbox" className="ui-checkbox" onChange={()=>{setIgnoreMerge(num)}}/>
+                <p className="ignore-merge">ignore merges</p>
                 <button 
                     className="secondary" 
                     onClick={()=>{setShowPopup(num === showPopup ? null : num)}}

@@ -12,14 +12,12 @@ import MiniForm from '../../components/MiniForm/MiniForm'
 import Repo from '../../components/Repo/Repo'
 import AddRepo from '../../components/AddRepo/AddRepo'
 
-import Calendar from '../../assets/Icons/Calendar.svg';
-import { set } from 'rsuite/esm/utils/dateUtils';
-
 
 function Home() {
     const [username, setUsername] = useState('');
     const [minChanges, setMinChanges] = useState('');
     const [ready, setReady] = useState(false);
+    const [showMerge, setShowMerge] = useState(true);
 
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
@@ -65,6 +63,12 @@ function Home() {
         setRepos(newRepos);
     }
 
+    const ignoreMerge = (repoIndex) => {
+        let newRepos = [...repos];
+        newRepos[repoIndex].ignoreMerge = !newRepos[repoIndex].ignoreMerge;
+        setRepos(newRepos);
+    }
+
     const removeRepo = (repoIndex) => {
         let newRepos = [...repos];
         newRepos.splice(repoIndex, 1);
@@ -81,7 +85,8 @@ function Home() {
             let repo = repos[i];
             let condensedRepo = {
                 path: repo.path,
-                branch: repo.branches[repo.chosenBranchIndex]
+                branch: repo.branches[repo.chosenBranchIndex],
+                ignoreMerge: repo.ignoreMerge
             }
             condensedRepos.push(condensedRepo);
         }
@@ -118,7 +123,8 @@ function Home() {
                 path: repoData.full_name,
                 branches: [],
                 link: repoData.html_url,
-                chosenBranchIndex: 0
+                chosenBranchIndex: 0,
+                ignoreMerge: false
             };
             const branchResponse = await fetch(repoData.branches_url.replace('{/branch}', ''), {
                 headers: {
@@ -214,6 +220,7 @@ function Home() {
                                     setShowPopup={setShowPopup} 
                                     handleBranchChange={changeBranch}
                                     removeRepo={removeRepo}
+                                    setIgnoreMerge={ignoreMerge}
                                 />
                             ))
                             :
