@@ -38,6 +38,11 @@ function Commits(){
     const [endDate, setEndDate] = useState(parsedData.endDate);
 
     const [fetching, setFetching] = useState(true);
+    const [copy, setCopy] = useState(false);
+
+    const [insertionsAverage, setInsertionsAverage] = useState(0);
+    const [deletionsAverage, setDeletionsAverage] = useState(0);
+    const [commitCount, setCommitCount] = useState(0);
 
     useEffect(() => {
         //populating repoData with empty arrays
@@ -68,6 +73,10 @@ function Commits(){
     const handleCopyAllLinks = async () => {
         const links = repoData.flat().map(commit => commit.html_url).join('\n');
         await navigator.clipboard.writeText(links);
+        setCopy(true);
+        setTimeout(() => {
+            setCopy(false);
+        }, 3000);
     }
 
 
@@ -144,12 +153,13 @@ function Commits(){
         console.log("fetching");
         for (let i = 0; i < repos.length; i++) {
             const repo = repos[i];
-            const url = `https://api.github.com/repos/${repo.path}/commits?sha=${repo.branches[repo.chosenBranchIndex]}&since=${startDate}&until=${endDate}&author=${username}&per_page=100`;
+            const url = `https://api.github.com/repos/${repo.path}/commits?sha=${repo.branch}&since=${startDate}&until=${endDate}&author=${username}&per_page=100`;
             let commitResponse = await fetchAllCommits(url);
             //determining if the commit meets the minChanges requirement
             // if (minChanges) {
                 // const filteredCommits = [];
                 for (let commit of commitResponse) {
+                    setCommitCount(prev => prev + 1);
                     const commitUrl = `https://api.github.com/repos/${repo.path}/commits/${commit.sha}`;
                     const detailResponse = await fetch(commitUrl, {
                         headers: {
@@ -176,14 +186,16 @@ function Commits(){
                             });
                         });
                     }
+                    setInsertionsAverage(prev => (prev + commitData.stats.additions));
+                    setDeletionsAverage(prev => (prev + commitData.stats.deletions));
                 }
-                setFetching(false);
                 // commitResponse = filteredCommits; // Replace the original commits array with filtered commits
-            // } else {
-            //     setRepoData(prev => [...prev, commitResponse]);
-            // }
-            // console.log(commitData);
-        }
+                // } else {
+                    //     setRepoData(prev => [...prev, commitResponse]);
+                    // }
+                    // console.log(commitData);
+            }
+        setFetching(false);
     //https://api.github.com/repos/AZ0228/Study-Compass/commits/9257742d295631a365cdf8b42b1197b5aaf09f4e
     }
 
@@ -234,11 +246,18 @@ function Commits(){
                         <div className="commits-list-header">
                             <div className="flex">
                                 {fetching ?  <Loader /> : <Icon dimension={20} type={"Check"}/>}
-                               
                                 <h2>{selected === 0 ? repoData.reduce((acc, curr) => acc + curr.length, 0) : repoData[selected-1].length} commits</h2>
+                                <p>average deletions and insertions: </p>
+                                <div className="diff">
+                                    <div className="deletion"></div>
+                                    <p>{commitCount !== 0 ? (insertionsAverage/commitCount).toFixed(0) : 0}</p>
+                                    <div className="insertion"></div>
+                                    <p>{commitCount !== 0 ? (deletionsAverage/commitCount).toFixed(0) : 0}</p>
+                                </div>  
                             </div>
                             <button onClick={handleCopyAllLinks}>
-                                <Icon dimension={16} type={'Copy'} />
+                                <p>copy all links</p>
+                                <Icon dimension={16} type={copy ? "Check1" : "Copy"} />
                             </button>
                         </div>
                         <div className="commits-content">

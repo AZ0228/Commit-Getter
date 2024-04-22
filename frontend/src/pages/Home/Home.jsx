@@ -75,16 +75,31 @@ function Home() {
         getToken().then(setJwt);
     }, []);
 
+    const condenseRepos = () => {
+        let condensedRepos = [];
+        for (let i = 0; i < repos.length; i++) {
+            let repo = repos[i];
+            let condensedRepo = {
+                path: repo.path,
+                branch: repo.branches[repo.chosenBranchIndex]
+            }
+            condensedRepos.push(condensedRepo);
+        }
+        return condensedRepos;
+    }
+
     const getCommits = () => {
         const info = {
             username: username,
             minChanges: minChanges,
             startDate: startDate,
             endDate: endDate,
-            repos: repos
+            repos: condenseRepos()
         }
         navigate(`/commits?data=${encodeURIComponent(JSON.stringify(info))}`);
     };
+
+    useEffect(() => {console.log(repos)}, [repos]);
 
     async function getRepo(apiUrl) {
         // const apiUrl = `https://api.github.com/repos/${path}}`;
@@ -143,7 +158,6 @@ function Home() {
         getRepo(url);
         
     };
-
 
     const handleSubmitPath = (path) => {
         //checking to see if already fetched
