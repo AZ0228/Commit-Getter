@@ -163,6 +163,9 @@ function Commits(){
             // if (minChanges) {
                 // const filteredCommits = [];
                 for (let commit of commitResponse) {
+                    if(repo.ignoreMerge && commit.parents.length > 1){
+                        continue;
+                    }
                     setCommitCount(prev => prev + 1);
                     const commitUrl = `https://api.github.com/repos/${repo.path}/commits/${commit.sha}`;
                     const detailResponse = await fetch(commitUrl, {
@@ -175,7 +178,7 @@ function Commits(){
                         throw new Error(`HTTP error! Status: ${detailResponse.status}`);
                     }
                     const commitData = await detailResponse.json();
-                    // console.log(commitData.stats);
+                    console.log(commitData);
                     if (commitData.stats.total >= minChanges) {
                         setRepoData(prev => {
                             if (i < 0 || i >= prev.length) {
@@ -248,7 +251,7 @@ function Commits(){
                          : 
                          <h2>{selected === 0 ? "showing all commits" : "showing select commits"}</h2>
                         }
-                        
+                        <h2>{selected !== 0 ? repos[selected-1].ignoreMerge ? ", ignoring merges": null : null}</h2>
                     </div>
                     <div className="commits-list">
                         <div className="commits-list-header">
@@ -281,7 +284,6 @@ function Commits(){
                                 ))
                             }
                         </div>
-
                     </div>
                 </div>
             </div>

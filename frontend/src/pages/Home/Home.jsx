@@ -12,26 +12,25 @@ import MiniForm from '../../components/MiniForm/MiniForm'
 import Repo from '../../components/Repo/Repo'
 import AddRepo from '../../components/AddRepo/AddRepo'
 
-import Calendar from '../../assets/Icons/Calendar.svg';
-import { set } from 'rsuite/esm/utils/dateUtils';
-
 
 function Home() {
-    const [username, setUsername] = useState('');
-    const [minChanges, setMinChanges] = useState('');
+    const [username, setUsername] = useState(localStorage.getItem('username') ? localStorage.getItem('username') : '');
+    const [minChanges, setMinChanges] = useState(localStorage.getItem('minChanges') ? localStorage.getItem('minChanges') : '0');
     const [ready, setReady] = useState(false);
 
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
 
-    const [repos, setRepos] = useState([]);
+    const [repos, setRepos] = useState(localStorage.getItem('repos') ? JSON.parse(localStorage.getItem('repos')) : []);
     const [jwt, setJwt] = useState('');
     const [showPopup, setShowPopup] = useState(null);
 
     const [addRepoError, setAddRepoError] = useState('');
     const navigate = useNavigate();
 
-
+    useEffect(() => {
+        getToken().then(setJwt);
+    }, []);
 
     useEffect(() => {
         if (username !== '' && jwt !== '' && repos.length > 0) {
@@ -65,15 +64,29 @@ function Home() {
         setRepos(newRepos);
     }
 
+    const ignoreMerge = (repoIndex) => {
+        let newRepos = [...repos];
+        newRepos[repoIndex].ignoreMerge = !newRepos[repoIndex].ignoreMerge;
+        setRepos(newRepos);
+    }
+
     const removeRepo = (repoIndex) => {
         let newRepos = [...repos];
         newRepos.splice(repoIndex, 1);
         setRepos(newRepos);
     }
 
+    //check for stored info on mount
     useEffect(() => {
-        getToken().then(setJwt);
-    }, []);
+        localStorage.setItem('repos', JSON.stringify(repos));
+        localStorage.setItem('username', username);
+        localStorage.setItem('minChanges', minChanges);
+        localStorage.setItem('startDate', startDate);
+        localStorage.setItem('endDate', endDate);
+        console.log(localStorage.getItem('repos'));
+    }, [repos, username, minChanges, startDate, endDate]);
+
+
 
     const condenseRepos = () => {
         let condensedRepos = [];
@@ -81,7 +94,8 @@ function Home() {
             let repo = repos[i];
             let condensedRepo = {
                 path: repo.path,
-                branch: repo.branches[repo.chosenBranchIndex]
+                branch: repo.branches[repo.chosenBranchIndex],
+                ignoreMerge: repo.ignoreMerge
             }
             condensedRepos.push(condensedRepo);
         }
@@ -118,7 +132,8 @@ function Home() {
                 path: repoData.full_name,
                 branches: [],
                 link: repoData.html_url,
-                chosenBranchIndex: 0
+                chosenBranchIndex: 0,
+                ignoreMerge: false
             };
             const branchResponse = await fetch(repoData.branches_url.replace('{/branch}', ''), {
                 headers: {
@@ -180,6 +195,9 @@ function Home() {
         }
     } 
 
+    // save repos and other attributes to local storage
+
+
     return (
         <div className="home">
             <div className="content-container">
@@ -214,6 +232,7 @@ function Home() {
                                     setShowPopup={setShowPopup} 
                                     handleBranchChange={changeBranch}
                                     removeRepo={removeRepo}
+                                    setIgnoreMerge={ignoreMerge}
                                 />
                             ))
                             :
