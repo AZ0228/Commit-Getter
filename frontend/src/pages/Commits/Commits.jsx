@@ -28,6 +28,7 @@ function Commits(){
     let parsedData = {};
     try {
         parsedData = JSON.parse(commitData);
+        console.log(parsedData);
     } catch (error) {
         console.log(error);
     }
@@ -158,11 +159,18 @@ function Commits(){
             if(!startDate || !endDate){
                 url = `https://api.github.com/repos/${repo.path}/commits?sha=${repo.branch}&author=${username}&per_page=100`;
             }
-            let commitResponse = await fetchAllCommits(url);
+            let commitResponses = [];
+            for(let branch of repo.branches){
+                url = `https://api.github.com/repos/${repo.path}/commits?sha=${branch}&since=${startDate}&until=${endDate}&author=${username}&per_page=100`;
+                let commitResponse = await fetchAllCommits(url);
+                let difference = commitResponse.filter(value => !commitResponses.includes(value));
+                commitResponses = commitResponses.concat(difference);
+            }
+            // let commitResponse = await fetchAllCommits(url);
             //determining if the commit meets the minChanges requirement
             // if (minChanges) {
                 // const filteredCommits = [];
-                for (let commit of commitResponse) {
+                for (let commit of commitResponses) {
                     if(repo.ignoreMerge && commit.parents.length > 1){
                         continue;
                     }
