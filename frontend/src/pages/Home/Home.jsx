@@ -60,7 +60,19 @@ function Home() {
 
     const changeBranch = (repoIndex, branchIndex) => {
         let newRepos = [...repos];
-        newRepos[repoIndex].chosenBranchIndex = branchIndex;
+        if(newRepos[repoIndex].chosenBranchIndexes.includes(branchIndex)){
+            newRepos[repoIndex].chosenBranchIndexes = newRepos[repoIndex].chosenBranchIndexes.filter(index => index !== branchIndex);
+            if(newRepos[repoIndex].chosenBranchIndexes.length === 0){
+                newRepos[repoIndex].chosenBranchIndexes.push(0);
+            }
+        } else {
+            //limit to 3 branches
+            if(newRepos[repoIndex].chosenBranchIndexes.length >= 3){
+                newRepos[repoIndex].chosenBranchIndexes.shift();
+            }
+            newRepos[repoIndex].chosenBranchIndexes.push(branchIndex);
+        }
+        // newRepos[repoIndex].chosenBranchIndex = branchIndex;
         setRepos(newRepos);
     }
 
@@ -94,7 +106,7 @@ function Home() {
             let repo = repos[i];
             let condensedRepo = {
                 path: repo.path,
-                branch: repo.branches[repo.chosenBranchIndex],
+                branches: repo.chosenBranchIndexes.map(index => repo.branches[index]),
                 ignoreMerge: repo.ignoreMerge
             }
             condensedRepos.push(condensedRepo);
@@ -132,7 +144,7 @@ function Home() {
                 path: repoData.full_name,
                 branches: [],
                 link: repoData.html_url,
-                chosenBranchIndex: 0,
+                chosenBranchIndexes: [0],
                 ignoreMerge: false
             };
             const branchResponse = await fetch(repoData.branches_url.replace('{/branch}', ''), {

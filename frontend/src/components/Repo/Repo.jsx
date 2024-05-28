@@ -22,7 +22,12 @@ function Repo({repo, num, showPopup, setShowPopup, handleBranchChange, removeRep
                     style={num === showPopup ? {backgroundColor: "#31363E"}: null}
                 >
                     <Icon dimension={16} type={"Branch"} />
-                    <p>{repo.branches[repo.chosenBranchIndex]}</p>
+                    {
+                        repo.chosenBranchIndexes.length > 1 ? 
+                        <p>{repo.chosenBranchIndexes.length} branches</p> : 
+                        <p>{repo.branches[repo.chosenBranchIndexes[0]]}</p>
+                    }
+                    {/* <p>{repo.branches[repo.chosenBranchIndexes[0]]}</p> */}
                     <Icon dimension={15} type={"DownArrow"}/>
                 </button>
                 <button className="delete" onClick={()=>{removeRepo(num)}}>
@@ -39,7 +44,7 @@ function Repo({repo, num, showPopup, setShowPopup, handleBranchChange, removeRep
                 <div className="branches">
                     {repo.branches.map((branch, index) => (
                         <div className="branch-container" key={`${index}${branch}`} onClick={()=>{handleBranchChange(num,index); setShowPopup(null)}}>
-                            {branch === repo.branches[repo.chosenBranchIndex] && 
+                            { repo.chosenBranchIndexes.includes(index) && 
                                 <div className="check">
                                     <Icon dimension={14} type={"Check1"} />
                                 </div>
