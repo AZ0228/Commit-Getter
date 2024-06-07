@@ -9,8 +9,7 @@ import Loader from '../../components/Loader/Loader';
 import { set } from 'rsuite/esm/utils/dateUtils';
 
 // example url:
-//http://localhost:3000/commits?data=%7B%22username%22%3A%22AZ0228%22%2C%22minChanges%22%3A%2210%22%2C%22startDate%22%3A%222024-04-12T16%3A31%3A54.420Z%22%2C%22endDate%22%3A%222024-04-19T16%3A31%3A54.420Z%22%2C%22repos%22%3A%5B%7B%22path%22%3A%22AZ0228%2FStudy-Compass%22%2C%22branches%22%3A%5B%22main%22%2C%22backend-user%22%2C%22error-handling%22%2C%22frontend-mobile%22%2C%22new%22%2C%22save-room-functionality%22%2C%22sort%22%5D%2C%22link%22%3A%22https%3A%2F%2Fgithub.com%2FAZ0228%2FStudy-Compass%22%2C%22chosenBranchIndex%22%3A0%7D%2C%7B%22path%22%3A%22hack-rpi%2FHackRPI-Mobile%22%2C%22branches%22%3A%5B%22main%22%2C%22Build-FAQ-Page%22%2C%22Hacker-Queue-Development%22%2C%22LoginoauthTests%22%2C%22Main_button%22%2C%22MentorQ%22%2C%22RavenLLevitt-patch-1%22%2C%22backend2024%22%2C%22backend-login-refactor%22%2C%22bug-fixing%22%2C%22calander-updates%22%2C%22calander-widget-v2%22%2C%22calendar-v3-2024%22%2C%22circle-border-fix%22%2C%22clock%22%2C%22clock-cleanup%22%2C%22clock-organization%22%2C%22dev%22%2C%22firestore%22%2C%22info%22%2C%22mentor-frontend%22%2C%22pdf-viewer%22%2C%22prize%22%2C%22prizes%22%2C%22push_notif_V2%22%2C%22push_notifications%22%2C%22revert-12-clock%22%2C%22revert-15-revert-12-clock%22%2C%22revert-18-Hacker-Que-UI%22%2C%22settings%22%5D%2C%22link%22%3A%22https%3A%2F%2Fgithub.com%2Fhack-rpi%2FHackRPI-Mobile%22%2C%22chosenBranchIndex%22%3A0%7D%5D%7D
-
+//http://localhost:3000/commits?data=%7B%22username%22%3A%22AZ0228%22%2C%22minChanges%22%3A%220%22%2C%22startDate%22%3A%222024-05-31T21%3A30%3A19.566Z%22%2C%22endDate%22%3A%222024-06-07T21%3A30%3A19.566Z%22%2C%22repos%22%3A%5B%7B%22path%22%3A%22Study-Compass%2FStudy-Compass%22%2C%22branches%22%3A%5B%22main%22%5D%2C%22ignoreMerge%22%3Afalse%7D%2C%7B%22path%22%3A%22Study-Compass%2FReact-Tutorial%22%2C%22branches%22%3A%5B%22main%22%5D%2C%22ignoreMerge%22%3Afalse%7D%2C%7B%22path%22%3A%22AZ0228%2FCommit-Getter%22%2C%22branches%22%3A%5B%22main%22%5D%2C%22ignoreMerge%22%3Afalse%7D%5D%7D#/commits?data=%7B%22username%22%3A%22AZ0228%22%2C%22minChanges%22%3A%225%22%2C%22startDate%22%3A%222024-05-31T21%3A36%3A26.240Z%22%2C%22endDate%22%3A%222024-06-07T21%3A36%3A26.240Z%22%2C%22repos%22%3A%5B%7B%22path%22%3A%22AZ0228%2FCommit-Getter%22%2C%22branches%22%3A%5B%22main%22%5D%2C%22ignoreMerge%22%3Afalse%7D%5D%7D
 function Commits(){
     const [jwt, setJwt] = useState('');
 
@@ -155,13 +154,12 @@ function Commits(){
         console.log("fetching");
         for (let i = 0; i < repos.length; i++) {
             const repo = repos[i];
-            let url = `https://api.github.com/repos/${repo.path}/commits?sha=${repo.branch}&since=${startDate}&until=${endDate}&author=${username}&per_page=100`;
-            if(!startDate || !endDate){
-                url = `https://api.github.com/repos/${repo.path}/commits?sha=${repo.branch}&author=${username}&per_page=100`;
-            }
             let commitResponses = [];
             for(let branch of repo.branches){
-                url = `https://api.github.com/repos/${repo.path}/commits?sha=${branch}&since=${startDate}&until=${endDate}&author=${username}&per_page=100`;
+                let url = `https://api.github.com/repos/${repo.path}/commits?sha=${branch}&since=${startDate}&until=${endDate}&author=${username}&per_page=100`;
+                if(!startDate || !endDate){
+                    url = `https://api.github.com/repos/${repo.path}/commits?sha=${branch}&author=${username}&per_page=100`;
+                }
                 let commitResponse = await fetchAllCommits(url);
                 let difference = commitResponse.filter(value => !commitResponses.includes(value));
                 commitResponses = commitResponses.concat(difference);

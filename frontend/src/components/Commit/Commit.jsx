@@ -4,17 +4,15 @@ import Icon from "../Icon/Icon";
 import { set } from "rsuite/esm/utils/dateUtils";
 
 function Commit({ commit }) {
-    const [loading, setLoading] = useState(true);
-    const [isValid, setIsValid] = useState(true);
     const [path, setPath] = useState(commit.html_url.split('github.com/')[1].split('/commit')[0]);
     const [message, setMessage] = useState(commit.commit.message);
     const [copyIcon, setCopyIcon] = useState("Copy");
+    const [animation, setAnimation] = useState(true);
     //checking if commit link is valid
 
     useEffect(() => {
         setTimeout(() => {
-            setLoading(false);
-            setIsValid(true);
+            setAnimation(false);
         }, 100);
 
     }, [commit]);
@@ -28,7 +26,7 @@ function Commit({ commit }) {
     }
 
     return (
-        <div className="commit">
+        <div className={`commit ${animation ? "before" : ""}`}>
             <div className="commit-left">
                 <div className="commit-header">
                     <a href={commit.html_url} target="none"><h3 onClick={()=>{console.log('hi')}}>{message.length > 100 ? `${message.slice(0,100)} ...` : `${message}` }</h3></a>
