@@ -8,7 +8,14 @@
     align-items: flex-start;
     justify-content: space-between;
     gap:10px;
+    transition: all 0.2s;
+    opacity:1;
 }
+
+.commit.before{
+    opacity:0;
+}
+
 
 .commit-left{
     display:flex;
