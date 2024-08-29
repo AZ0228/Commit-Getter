@@ -199,12 +199,16 @@ function Home() {
     }
 
     const handleDate = (date) =>{
+        if(!date){
+            return;
+        }
         if(date.length === 2){
             setStartDate(date[0].toISOString());
             setEndDate(date[1].toISOString());
             console.log(date[0].toISOString());
             console.log(date[1].toISOString());
         }
+        console.log(date);
     } 
 
     // save repos and other attributes to local storage
@@ -228,7 +232,7 @@ function Home() {
                                 caretAs={FaCalendar} 
                                 showOneCalendar  
                                 placeholder="Select Date Range"
-                                onOk={handleDate}
+                                onChange={handleDate}
                             />
                             <button onClick={getCommits} className={`button go ${ready ? "active": ""}`}>Get Commits</button>
                         </div>
