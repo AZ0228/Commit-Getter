@@ -96,7 +96,7 @@
 
 }
 
-.home .go.active:hover{
+.home .go.active{
     box-shadow: 0 0 5px var(--purple),
                 0 0 10px var(--purple),
                 0 0 20px var(--purple);
