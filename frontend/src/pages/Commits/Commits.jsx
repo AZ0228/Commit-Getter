@@ -314,7 +314,7 @@ function Commits(){
                                 ))
                                 :
                                 repoData[selected-1].map((commit, index) => (
-                                    <Commit commit={commit} key={`${commit.sha}`}/>
+                                    <Commit index={index} commit={commit} key={`${commit.sha}${index}`} showDiff={()=>handleShowDiff(commit)}/>
                                 ))
                             }
                         </div>
