@@ -1,0 +1,41 @@
+.diff-viewer {
+    font-family: monospace;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px;
+    background-color: var(--accent);
+    max-width: 900px;
+    width:100%;
+  }
+  
+  .file-diff {
+    margin-bottom: 20px;
+  }
+  
+  .file-name {
+    font-weight: bold;
+    color: #0366d6;
+  }
+  
+  .patch {
+    background-color: #fff;
+    border: 1px solid #e1e4e8;
+    padding: 10px;
+    border-radius: 4px;
+    overflow-x: auto;
+  }
+  
+  .diff-line {
+    white-space: pre;
+  }
+  
+  .diff-line.added {
+    background-color: #e6ffed;
+    color: #22863a;
+  }
+  
+  .diff-line.removed {
+    background-color: #ffeef0;
+    color: #cb2431;
+  }
+  
