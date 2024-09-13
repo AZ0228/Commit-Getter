@@ -8,18 +8,17 @@ import Icon from '../../components/Icon/Icon';
 import Loader from '../../components/Loader/Loader';
 import { set } from 'rsuite/esm/utils/dateUtils';
 import DiffViewer from '../../components/DiffViewer/DiffViewer';
+import Popup from '../../components/Popup/Popup';
+
 
 // example url:
 //http://localhost:3000/commits?data=%7B%22username%22%3A%22AZ0228%22%2C%22minChanges%22%3A%220%22%2C%22startDate%22%3A%222024-05-31T21%3A30%3A19.566Z%22%2C%22endDate%22%3A%222024-06-07T21%3A30%3A19.566Z%22%2C%22repos%22%3A%5B%7B%22path%22%3A%22Study-Compass%2FStudy-Compass%22%2C%22branches%22%3A%5B%22main%22%5D%2C%22ignoreMerge%22%3Afalse%7D%2C%7B%22path%22%3A%22Study-Compass%2FReact-Tutorial%22%2C%22branches%22%3A%5B%22main%22%5D%2C%22ignoreMerge%22%3Afalse%7D%2C%7B%22path%22%3A%22AZ0228%2FCommit-Getter%22%2C%22branches%22%3A%5B%22main%22%5D%2C%22ignoreMerge%22%3Afalse%7D%5D%7D#/commits?data=%7B%22username%22%3A%22AZ0228%22%2C%22minChanges%22%3A%225%22%2C%22startDate%22%3A%222024-05-31T21%3A36%3A26.240Z%22%2C%22endDate%22%3A%222024-06-07T21%3A36%3A26.240Z%22%2C%22repos%22%3A%5B%7B%22path%22%3A%22AZ0228%2FCommit-Getter%22%2C%22branches%22%3A%5B%22main%22%5D%2C%22ignoreMerge%22%3Afalse%7D%5D%7D
 function Commits(){
     const [jwt, setJwt] = useState('');
-
     const [selected, setSelected] = useState(0);
-
     const [repoData, setRepoData] = useState([[]]);
-
     const [fetchedData, setFetchedData] = useState(false);
-
+    const [showDiff, setShowDiff] = useState([]);
 
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
@@ -45,6 +44,9 @@ function Commits(){
     const [insertionsAverage, setInsertionsAverage] = useState(0);
     const [deletionsAverage, setDeletionsAverage] = useState(0);
     const [commitCount, setCommitCount] = useState(0);
+
+    const [showDiffPopup, setShowDiffPopup] = useState(false);
+    const [currentDiffCommit, setCurrentDiffCommit] = useState(null);
 
     useEffect(() => {
         //populating repoData with empty arrays
@@ -80,6 +82,14 @@ function Commits(){
             setCopy(false);
         }, 3000);
     }
+
+    // const handleShowDiff = (index) => {
+    //     setShowDiff(prev => {
+    //         const newShowDiff = [...prev];
+    //         newShowDiff[index] = !newShowDiff[index];
+    //         return newShowDiff;
+    //     });
+    // }
 
 
     async function getToken() {
@@ -220,6 +230,12 @@ function Commits(){
 
     }, [jwt]);
 
+    useEffect(() => {
+        if(fetching) return;
+        //populate showDiff with false
+        setShowDiff(new Array(repoData.flat().length).fill(false));
+    }, [fetching]);
+
     // useEffect(() => {console.log(repoData)}, [repoData]);
 
     const handleRepoClick = (index) => {
@@ -230,8 +246,20 @@ function Commits(){
         }
     }
 
+    const handleShowDiff = (commit) => {
+        setCurrentDiffCommit(commit);
+        setShowDiffPopup(true);
+    }
+
+    const onDiffClose = () => {
+        setShowDiffPopup(false);
+    }
+
     return(
         <div className="commits">
+            <Popup isOpen={showDiffPopup} onClose={onDiffClose}>
+                {currentDiffCommit && <DiffViewer show={true} files={currentDiffCommit.files}/>}
+            </Popup>
             <Header />
             <div className="container">
                 <div className="left">
@@ -257,7 +285,7 @@ function Commits(){
                         {startDate && endDate ?<h2>{selected === 0 ? "showing all commits" : "showing select commits"} from {new Date(startDate).toLocaleDateString()} to {new Date(endDate).toLocaleDateString() } </h2>
                          : 
                          <h2>{selected === 0 ? "showing all commits" : "showing select commits"}</h2>
-                        }
+                        } 
                         <h2>{selected !== 0 ? repos[selected-1].ignoreMerge ? ", ignoring merges": null : null}</h2>
                     </div>
                     <div className="commits-list">
@@ -268,9 +296,9 @@ function Commits(){
                                 <p>average deletions and insertions: </p>
                                 <div className="diff">
                                     <div className="deletion"></div>
-                                    <p>{commitCount !== 0 ? (insertionsAverage/commitCount).toFixed(0) : 0}</p>
-                                    <div className="insertion"></div>
                                     <p>{commitCount !== 0 ? (deletionsAverage/commitCount).toFixed(0) : 0}</p>
+                                    <div className="insertion"></div>
+                                    <p>{commitCount !== 0 ? (insertionsAverage/commitCount).toFixed(0) : 0}</p>
                                 </div>  
                             </div>
                             <button onClick={handleCopyAllLinks}>
@@ -282,15 +310,13 @@ function Commits(){
                             { selected === 0 ?
                                 repoData.map((repo, index) => (
                                     repo.map((commit, index) => (
-                                        <div>
-                                            <Commit commit={commit} key={`${commit.sha}`}/>
-                                            <DiffViewer files={commit.files} key={`${commit.sha}diffViewer`}/>
-                                        </div>
+                                        <Commit index={index} commit={commit} key={`${commit.sha}${index}`} showDiff={()=>handleShowDiff(commit)}/>
+
                                     ))
                                 ))
                                 :
                                 repoData[selected-1].map((commit, index) => (
-                                    <Commit commit={commit} key={`${commit.sha}`}/>
+                                    <Commit index={index} commit={commit} key={`${commit.sha}${index}`} showDiff={()=>handleShowDiff(commit)}/>
                                 ))
                             }
                         </div>

@@ -3,7 +3,7 @@ import "./Commit.css";
 import Icon from "../Icon/Icon";
 import { set } from "rsuite/esm/utils/dateUtils";
 
-function Commit({ commit }) {
+function Commit({ index, commit, showDiff }) {
     const [path, setPath] = useState(commit.html_url.split('github.com/')[1].split('/commit')[0]);
     const [message, setMessage] = useState(commit.commit.message);
     const [copyIcon, setCopyIcon] = useState("Copy");
@@ -33,15 +33,13 @@ function Commit({ commit }) {
                     <div className="subheading">
                         <p className="commit-path">{path}</p>
 
-                        {commit.stats ? 
+                        {commit.stats &&
                             <div className="diff">
                                 <div className="deletion"></div>
                                 <p>{commit.stats.deletions}</p>
                                 <div className="insertion"></div>
                                 <p>{commit.stats.additions}</p>
                             </div>  
-                            :
-                            null  
                         }
                     </div>
                 </div>
@@ -50,6 +48,9 @@ function Commit({ commit }) {
                 <Icon dimension={16} type={"Calendar"} />
                 <h3>{new Date(commit.commit.author.date).toLocaleDateString().slice(0, -5)}</h3>
                 <hr />
+                <a onClick={()=>showDiff(index)}>                
+                    <h3>show diff</h3>
+                </a>
                 <a href={commit.html_url} target="none">                
                     <h3>{commit.sha.slice(0,6)}</h3>
                     <Icon dimension={16} type={"Open"} />
