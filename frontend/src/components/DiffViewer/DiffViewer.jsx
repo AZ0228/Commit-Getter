@@ -1,11 +1,13 @@
 import React from 'react';
 import './DiffViewer.css'; // Import your CSS for styling
 
+
 const DiffViewer = ({ show, files }) => {
     if(!show){
         return null;
     }
     console.log(files);
+
     return (
         <div className="diff-viewer">
             {files.map((file, index) => (
