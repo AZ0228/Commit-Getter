@@ -1,12 +1,23 @@
 import React from 'react';
 import './DiffViewer.css'; // Import your CSS for styling
 
-const DiffViewer = ({ files }) => {
+const DiffViewer = ({ show, files }) => {
+    if(!show){
+        return null;
+    }
+    console.log(files);
     return (
         <div className="diff-viewer">
             {files.map((file, index) => (
                 <div key={index} className="file-diff">
-                    <h3 className="file-name">{file.filename}</h3>
+                    <div className="file-header">            
+                        <div className="deletion"></div>
+                        <p>{file.deletions}</p>
+                        <div className="insertion"></div>
+                        <p>{file.additions}</p>
+                        <h3 className="file-name">{file.filename}</h3>
+
+                    </div>
                     <pre className="patch">
                         {file.patch && file.patch.split('\n').map((line, i) => (
                             <DiffLine key={i} line={line} />

@@ -1,41 +1,60 @@
 .diff-viewer {
-    font-family: monospace;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 10px;
-    background-color: var(--accent);
-    max-width: 900px;
-    width:100%;
-  }
-  
-  .file-diff {
-    margin-bottom: 20px;
-  }
-  
-  .file-name {
-    font-weight: bold;
-    color: #0366d6;
-  }
-  
-  .patch {
-    background-color: #fff;
-    border: 1px solid #e1e4e8;
-    padding: 10px;
-    border-radius: 4px;
-    overflow-x: auto;
-  }
-  
-  .diff-line {
-    white-space: pre;
-  }
-  
-  .diff-line.added {
-    background-color: #e6ffed;
-    color: #22863a;
-  }
-  
-  .diff-line.removed {
-    background-color: #ffeef0;
-    color: #cb2431;
-  }
-  
+  font-family: monospace;
+  border-radius: 6px;
+  padding: 10px;
+  max-width: 900px;
+  width: 100%;
+}
+
+
+
+.file-diff {
+  margin-bottom: 20px;
+  border: 1px solid var(--border1);
+  box-sizing: border-box;
+  border-radius: 7px;
+  overflow-x:hidden;
+}
+
+.file-header {
+  display: flex;
+  width: 100%;
+  background-color: var(--accent);
+  padding: 10px 15px;
+  box-sizing: border-box;
+  align-items: center;
+}
+
+.file-header h3{
+  margin-left:10px;
+}
+
+.file-name {
+  color: white;
+  font-weight: 500;
+  font-size: 13px;
+}
+
+.patch {
+  background-color: #0d1117;
+  padding: 10px;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin:0;
+}
+
+.diff-line {
+  white-space: pre;
+  overflow: show;
+  font-size: 12px;
+}
+
+.diff-line.added {
+  background-color: #2ea04326;
+  color: rgb(126, 231, 135);
+}
+
+.diff-line.removed {
+  background-color: #f8514926;
+  color: #ff7b72;
+}
