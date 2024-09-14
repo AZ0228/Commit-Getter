@@ -1,0 +1,65 @@
+.paste-commits{
+    .input{
+        width:100%;
+        flex-grow:1;
+        display:flex;
+        overflow:auto;
+        flex-direction: column;
+        gap:10px;
+        textarea,
+        .parsed-commits{
+            width:100%;
+            flex-grow:1;
+            background-color: var(--accent);
+            outline:none;
+            border:none;
+            padding:10px;
+            border-radius:10px;
+            box-sizing: border-box;
+            color: var(--light-subtext);
+            overflow-y: auto;
+        }
+
+        .parsed-commit{
+            font-family: 'Mona Sans';
+            font-size: 13px;
+            padding: 3px 5px;
+            background-color: var(--purple);
+            color: rgba(255,255,255,0.6);
+            border-radius: 10px;
+            width: fit-content;
+            width: moz-fit-content;
+        }
+
+        .parsed-commit.invalid{
+            background-color: var(--deletions);
+        }
+
+        .invalid-commits{
+            width:100%;
+            background-color: var(--accent);
+            outline:none;
+            border:none;
+            padding:10px;
+            border-radius:10px;
+            box-sizing: border-box;
+            color: var(--light-subtext);
+            p:not(.parsed-commit){
+                font-family: 'Mona Sans';
+                font-size: 13px;
+                color: var(--dark-subtext);
+            }
+            
+        }
+
+    }
+    .button{
+        background-color: var(--purple);
+        color: var(--main-text);
+        padding:7px 13px;
+        border-radius: 5px;
+        display:flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
