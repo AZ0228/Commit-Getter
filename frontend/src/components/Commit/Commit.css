@@ -10,6 +10,20 @@
     gap:10px;
     transition: all 0.2s;
     opacity:1;
+    .author{
+        display:flex;
+        background-color: var(--accent);
+        padding:2px 7px;
+        border-radius: 5px;
+        font-size:13px;
+        gap:5px;
+        align-items: center;
+        img{
+            height:14px;
+            width:14px;
+            border-radius: 50%;
+        }
+    }
 }
 
 .commit.before{

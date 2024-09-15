@@ -1,4 +1,59 @@
 .paste-commits{
+    .diff{
+        p{
+            font-size: 13px;
+            color: var(--dark-subtext);
+            font-weight: 500;
+        }
+    }
+    .user-details{
+        display:flex;
+        border: 1px solid var(--border1);
+        border-radius:8px;
+        flex-direction: column;
+        padding:15px;
+        gap:15px;
+        img{
+            width:40px;
+            height:40px;
+            border-radius: 50%;
+        }
+        .user{
+            display:flex;
+            gap:10px;
+            h2{
+                font-family: 'Mona Sans';
+                font-size: 16px;
+                color: var(--blue);
+            }
+            .details{
+                display: flex;
+                flex-direction: column;
+                gap:5px;
+            }
+            .diff{
+                margin-left:0;
+            }
+        }
+        .user-repos{
+            display:flex;
+            flex-direction: column;
+            gap:10px;
+            .user-repo{
+                display:flex;
+                border-radius: 5px;
+                background-color: var(--accent);
+                padding:5px 10px;
+                h2{
+                    font-family: 'Mona Sans';
+                    font-size: 13px;
+                    color: var(--light-subtext);
+                    font-weight:400;
+                }
+            }
+
+        }
+    }
     .input{
         width:100%;
         flex-grow:1;
@@ -18,6 +73,52 @@
             box-sizing: border-box;
             color: var(--light-subtext);
             overflow-y: auto;
+        }
+
+        .username{
+            display:flex;
+            gap:10px;
+            align-items: center;
+            input{
+                background-color: var(--accent);
+                outline:none;
+                border:none;
+                padding:10px;
+                border-radius:10px;
+                box-sizing: border-box;
+                color: var(--light-subtext);
+            }
+            p{
+                font-family: 'Mona Sans';
+                font-size: 13px;
+                color: var(--dark-subtext);
+            }
+        }
+
+        .button-container{
+            display:flex;
+            justify-content: flex-end;
+            button{
+                transition: all 0.3s;
+                background-color: var(--accent);
+                color: var(--light-subtext)
+            }
+            button.active{
+                background-color: var(--purple);
+                color: var(--main-text);
+            }
+            .back1{
+                width:0;
+                opacity: 0;
+                padding:0;
+            }
+            .back{
+                width:20%;
+                margin-right:10px;
+            }
+            .go{
+                flex-grow:1
+            }
         }
 
         .parsed-commit{

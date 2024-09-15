@@ -52,6 +52,12 @@ function PasteCommits(){
     const [fetching, setFetching] = useState(true);
     const [copy, setCopy] = useState(false);
 
+    const [userInsertions, setUserInsertions] = useState(0);
+    const [userDeletions, setUserDeletions] = useState(0);
+    const [userCommitCount, setUserCommitCount] = useState(0);
+    const [userInfo, setUserInfo] = useState(null);
+    
+
     const [insertionsAverage, setInsertionsAverage] = useState(0);
     const [deletionsAverage, setDeletionsAverage] = useState(0);
     const [commitCount, setCommitCount] = useState(0);
@@ -137,7 +143,25 @@ function PasteCommits(){
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
             const data = await response.json();
+            // account for coauthors
+            if(username !== "" && data.author.login.toLowerCase() === username.toLowerCase()){
+                setUserInsertions(prev => prev + data.stats.additions);
+                setUserDeletions(prev => prev + data.stats.deletions);
+                setUserCommitCount(prev => prev + 1);
+            }
+            //check if userInfo is null
+            if(userInfo === null){
+                //check if author is the same as username, ignore casing
+                if(data.author.login.toLowerCase() === username.toLowerCase()){
+                    setUserInfo(data.author);
+                }
+            }
+
             commits.push(data);
+            setInsertionsAverage(prev => prev + data.stats.additions);
+            setDeletionsAverage(prev => prev + data.stats.deletions);
+            setCommitCount(prev => prev + 1);
+
             const repo = url.split('/repos/')[1].split('/commits')[0];
             reposSet.add(repo);
             //add to allCommits
@@ -227,6 +251,23 @@ function PasteCommits(){
         await getCommits(urls);
         setFetching(false);
     }
+    
+    const onBack = () => {
+        setStarted(false);
+        setParsed(false);
+        setParsedCommits([]);
+        setInvalidCommits([]);
+        setAllCommits([]);
+        setRepoData([[]]);
+        setRepos([]);
+        setInsertionsAverage(0);
+        setDeletionsAverage(0);
+        setCommitCount(0);
+    }
+
+    const handleUsernameChange = (e) => {
+        setUsername(e.target.value);
+    }
 
 
     return(
@@ -262,8 +303,50 @@ function PasteCommits(){
                         } 
                         <h2>{selected !== 0 ? repos[selected-1].ignoreMerge ? ", ignoring merges": null : null}</h2>
                     </div>
+                    {
+                        started && !fetching && username !== "" &&
+                        <div className="user-details">
+                            <div className="user">
+                                <img src={userInfo && userInfo.avatar_url} alt="" />
+                                <div className="details">
+                                    <h2>{userInfo && userInfo.login}</h2>
+                                    <div className="diff">
+                                        <div className="deletion"></div>
+                                        <p>{userDeletions}</p>
+                                        <div className="insertion"></div>
+                                        <p>{userInsertions}</p>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="user-repos">
+                                {repos.map((repo, index) => (
+                                    <div className="user-repo" key={`${index}${repo}`}>
+                                        <h2>{repo.path}</h2>
+                                        <div className="diff">
+                                            <div className="deletion"></div>
+                                            {/* grab from repoData */}
+                                            <p>{ 
+                                                repoData[index].length !== 0 ?
+                                                (repoData[index].reduce((acc, curr) => acc + curr.stats.deletions, 0)).toFixed(0) : 0
+                                            }</p>
+                                            <div className="insertion"></div>
+                                            <p>
+                                                {
+                                                    repoData[index].length !== 0 ?
+                                                    (repoData[index].reduce((acc, curr) => acc + curr.stats.additions, 0)).toFixed(0) : 0
+                                                    
+                                                }
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    }
                     {started ? 
                         <div className="commits-list">
+
                             <div className="commits-list-header">
                                 <div className="flex">
                                     {fetching ?  <Loader /> : <Icon dimension={20} type={"Check"}/>}
@@ -280,9 +363,17 @@ function PasteCommits(){
                             </div>
                             <div className="commits-content">
                                 { selected === 0 ?
-                                    allCommits.map((commit, index) => (
-                                        <Commit index={index} commit={commit} key={`${commit.sha}${index}`} showDiff={()=>handleShowDiff(commit)}/>
-                                    ))
+                                    allCommits.map((commit, index) => {
+                                        if(commit.author.login !== username){
+                                            return(
+                                                <Commit index={index} commit={commit} key={`${commit.sha}${index}`} showDiff={()=>handleShowDiff(commit)} showAuthor={true}/>
+                                            )
+                                        } else {
+                                            return(
+                                                <Commit index={index} commit={commit} key={`${commit.sha}${index}`} showDiff={()=>handleShowDiff(commit)} showAuthor={true}/>
+                                            )
+                                        }
+                                    })
                                     :
                                     repoData[selected-1].map((commit, index) => (
                                         <Commit index={index} commit={commit} key={`${commit.sha}${index}`} showDiff={()=>handleShowDiff(commit)}/>
@@ -292,8 +383,12 @@ function PasteCommits(){
                         </div>
 
                     :
-                        parsed ? 
-                            <div className="input">
+                        <div className="input">
+                            <div className="username">
+                                {/* <label htmlFor="username"><p>Username</p></label> */}
+                                <input type="text" placeholder='Github Username' value={username} onChange={handleUsernameChange}/>
+                            </div>
+                            {parsed ?
                                 <div className="parsed-commits">
                                     {parsedCommits.map((commit, index) => (
                                         <p className="parsed-commit">
@@ -301,24 +396,24 @@ function PasteCommits(){
                                         </p>
                                     ))}
                                 </div>
-                                {invalidCommits.length > 0 && 
-                                    <div className="invalid-commits">
-                                        <p>Caution: Filtered out invalid links</p>
-                                        {invalidCommits.map((commit, index) => (
-                                            <p className="parsed-commit invalid">
-                                                {commit}
-                                            </p>
-                                        ))}
-                                    </div>
-                                }
-                                <button className="button go" onClick={onGetCommits}>Get Commits</button>
-                            </div>
-                            
-                            :
-                            <div className="input">
+                            : 
                                 <textarea name="s" id="" value={rawCommits} onChange={(e)=>setRawCommits(e.target.value)} ></textarea>
-                                <button className="button go" onClick={onParseCommits}>Parse Commits</button>
+                            }
+                            {invalidCommits.length > 0 && 
+                                <div className="invalid-commits">
+                                    <p>Caution: Filtered out invalid links</p>
+                                    {invalidCommits.map((commit, index) => (
+                                        <p className="parsed-commit invalid">
+                                            {commit}
+                                        </p>
+                                    ))}
+                                </div>
+                            }
+                            <div className="button-container">
+                                <button className={`button activ ${parsed ? "back" : "back1"}`} onClick={onBack}>back</button>
+                                <button className={`button go ${parsed ? parsedCommits.length > 0 && "active" : rawCommits !== '' && "active"}`} onClick={parsed ? onGetCommits : onParseCommits}>{parsed ? "Get Commits" : "Parse Commits"}</button>
                             </div>
+                        </div>
                         
                     }
 

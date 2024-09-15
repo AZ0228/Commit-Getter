@@ -3,7 +3,7 @@ import "./Commit.css";
 import Icon from "../Icon/Icon";
 import { set } from "rsuite/esm/utils/dateUtils";
 
-function Commit({ index, commit, showDiff }) {
+function Commit({ index, commit, showDiff, showAuthor }) {
     const [path, setPath] = useState(commit.html_url.split('github.com/')[1].split('/commit')[0]);
     const [message, setMessage] = useState(commit.commit.message);
     const [copyIcon, setCopyIcon] = useState("Copy");
@@ -40,6 +40,14 @@ function Commit({ index, commit, showDiff }) {
                                 <div className="insertion"></div>
                                 <p>{commit.stats.additions}</p>
                             </div>  
+                        }
+                        {
+                            showAuthor && 
+                            <div className="author">
+                                <img src={commit.author.avatar_url} alt="" />
+                                <p>{commit.author ? commit.author.login : commit.commit.author.name}</p>
+                            </div>
+
                         }
                     </div>
                 </div>
