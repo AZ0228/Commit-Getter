@@ -17,6 +17,8 @@
     --deletions: #DA3633;
     --popup: #161B22;
     --commit-repo-hover: #1B1F24;
+    --red: rgba(248, 81, 73, 1);
+    --red-background: rgba(248, 81, 73, 0.1);
 
     --font1: 'Mona Sans';
     --font2: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";;

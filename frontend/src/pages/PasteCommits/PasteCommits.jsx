@@ -65,6 +65,8 @@ function PasteCommits(){
     const [showDiffPopup, setShowDiffPopup] = useState(false);
     const [currentDiffCommit, setCurrentDiffCommit] = useState(null);
 
+    const [showErrorPopup, setShowErrorPopup] = useState(false);
+    const [errors, setErrors] = useState([]);
     // useEffect(() => {
     //     //populating repoData with empty arrays
     //     setRepoData(new Array(repos.length).fill([]));
@@ -132,6 +134,7 @@ function PasteCommits(){
         const commits = [];
         //set of repos
         const reposSet = new Set();
+        let response;
         for (const url of urls) {
             const response = await fetch(url, {
                 headers: {
@@ -140,7 +143,11 @@ function PasteCommits(){
                 }
             });
             if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+                // commits.push({error: response.statusText, stats: {deletions: 0, additions: 0}});
+                console.log(response.statusText);
+                const originalUrl = url.replace('api.github.com/repos', 'github.com').replace('commits', 'commit');
+                setErrors(prev => [...prev, originalUrl]);
+                continue;
             }
             const data = await response.json();
             // account for coauthors
@@ -179,6 +186,7 @@ function PasteCommits(){
         }
 
         commits.forEach(commit => {
+            console.log(commit);
             const repo = commit.url.split('/repos/')[1].split('/commits')[0];
             const index = newRepos.findIndex(r => r.path === repo);
             if(index !== -1){
@@ -224,6 +232,14 @@ function PasteCommits(){
 
     const onDiffClose = () => {
         setShowDiffPopup(false);
+    }
+
+    const handleShowError = () => {
+        setShowErrorPopup(true);
+    }
+
+    const onErrorClose = () => {
+        setShowErrorPopup(false);
     }
 
     const onParseCommits = (e) => {
@@ -275,6 +291,20 @@ function PasteCommits(){
             <Popup isOpen={showDiffPopup} onClose={onDiffClose}>
                 {currentDiffCommit && <DiffViewer show={true} files={currentDiffCommit.files}/>}
             </Popup>
+            <Popup isOpen={showErrorPopup} onClose={onErrorClose}>
+                <div className="error-popup">
+                    <h1>Errors</h1>
+                    <h3>
+                        the following links errored, either because they are invalid or because they are not accessible
+                    </h3>
+                    <div className="error-content">
+                        {errors.map((error, index) => (
+                            <p key={index}>{error}</p>
+                        ))}
+                    </div>
+                </div>
+
+            </Popup>    
             <Header />
             <div className="container">
                 <div className="left">
@@ -359,6 +389,12 @@ function PasteCommits(){
                                         <p>{commitCount !== 0 ? (insertionsAverage/commitCount).toFixed(0) : 0}</p>
                                     </div>  
                                 </div>
+                                {errors.length > 0 &&                 
+                                    <button className="error" onClick={handleShowError}>
+                                        <Icon dimension={20} type={"Error"}/>
+                                        {errors.length } errors
+                                    </button>
+                                }
 
                             </div>
                             <div className="commits-content">

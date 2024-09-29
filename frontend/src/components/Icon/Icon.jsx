@@ -14,6 +14,7 @@ import Check1 from '../../assets/Icons/Check1.svg';
 import X from '../../assets/Icons/X.svg';
 import Trash from '../../assets/Icons/Trash.svg';
 import Loading from '../../assets/Icons/Loading.svg';
+import Error from '../../assets/Icons/Error.svg';
 
 
 function Icon({dimension, type}){
@@ -31,7 +32,8 @@ function Icon({dimension, type}){
         "Check1": Check1,
         "X": X,
         "Trash": Trash,
-        "Loading": Loading
+        "Loading": Loading,
+        "Error": Error
     } 
     
     if(!icon[type]){
