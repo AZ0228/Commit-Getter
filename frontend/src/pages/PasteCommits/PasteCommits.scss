@@ -31,7 +31,6 @@
     }
 }
 .paste-commits{
-    
     .diff{
         p{
             font-size: 13px;
@@ -42,7 +41,12 @@
     .error{
         color: var(--red);
         background-color: var(--red-background);
-        padding: 7px 15px;
+        padding: 4px 10px;
+    }
+    .users{
+        display:flex;
+        flex-wrap:wrap;
+        gap:10px;
     }
     .user-details{
         display:flex;

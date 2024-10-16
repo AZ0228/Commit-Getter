@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import '../Commits/Commits.css';
-import './PasteCommits.css'
+import './PasteCommits.scss'
 import { useLocation } from 'react-router-dom';
 
 import Header from '../../components/Header/Header';
 import Commit from '../../components/Commit/Commit';
 import Icon from '../../components/Icon/Icon';
 import Loader from '../../components/Loader/Loader';
-import { set } from 'rsuite/esm/utils/dateUtils';
 import DiffViewer from '../../components/DiffViewer/DiffViewer';
 import Popup from '../../components/Popup/Popup';
 
@@ -19,7 +18,6 @@ function PasteCommits(){
     const [jwt, setJwt] = useState('');
     const [selected, setSelected] = useState(0);
     const [repoData, setRepoData] = useState([[]]);
-    const [fetchedData, setFetchedData] = useState(false);
     const [showDiff, setShowDiff] = useState([]);
 
     const [allCommits, setAllCommits] = useState([]);
@@ -31,20 +29,7 @@ function PasteCommits(){
     const [parsedCommits, setParsedCommits] = useState([]);
     const [invalidCommits, setInvalidCommits] = useState([]);
 
-    // const location = useLocation();
-    // const queryParams = new URLSearchParams(location.search);
-    // const commitData = queryParams.get('data');
-
-    // let parsedData = {};
-    // try {
-    //     parsedData = JSON.parse(commitData);
-    //     console.log(parsedData);
-    // } catch (error) {
-    //     console.log(error);
-    // }
-
     const [username, setUsername] = useState("");
-    const [minChanges, setMinChanges] = useState(0);
     const [repos, setRepos] = useState([]);
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
@@ -52,11 +37,7 @@ function PasteCommits(){
     const [fetching, setFetching] = useState(true);
     const [copy, setCopy] = useState(false);
 
-    const [userInsertions, setUserInsertions] = useState(0);
-    const [userDeletions, setUserDeletions] = useState(0);
-    const [userCommitCount, setUserCommitCount] = useState(0);
-    const [userInfo, setUserInfo] = useState(null);
-    
+    const [users, setUsers] = useState([]);
 
     const [insertionsAverage, setInsertionsAverage] = useState(0);
     const [deletionsAverage, setDeletionsAverage] = useState(0);
@@ -67,10 +48,6 @@ function PasteCommits(){
 
     const [showErrorPopup, setShowErrorPopup] = useState(false);
     const [errors, setErrors] = useState([]);
-    // useEffect(() => {
-    //     //populating repoData with empty arrays
-    //     setRepoData(new Array(repos.length).fill([]));
-    // },[repos]);
 
     async function getRateLimitStatus(jwt) {
         try {
@@ -92,16 +69,6 @@ function PasteCommits(){
             getRateLimitStatus(jwt);
         }
     }, [jwt]);
-
-
-    // const handleShowDiff = (index) => {
-    //     setShowDiff(prev => {
-    //         const newShowDiff = [...prev];
-    //         newShowDiff[index] = !newShowDiff[index];
-    //         return newShowDiff;
-    //     });
-    // }
-
 
     async function getToken() {
         // Check if a token is stored and valid
@@ -135,6 +102,7 @@ function PasteCommits(){
         //set of repos
         const reposSet = new Set();
         let response;
+        const userinfo = [];
         for (const url of urls) {
             const response = await fetch(url, {
                 headers: {
@@ -143,25 +111,26 @@ function PasteCommits(){
                 }
             });
             if (!response.ok) {
-                // commits.push({error: response.statusText, stats: {deletions: 0, additions: 0}});
                 console.log(response.statusText);
                 const originalUrl = url.replace('api.github.com/repos', 'github.com').replace('commits', 'commit');
                 setErrors(prev => [...prev, originalUrl]);
                 continue;
             }
             const data = await response.json();
-            // account for coauthors
-            if(username !== "" && data.author.login.toLowerCase() === username.toLowerCase()){
-                setUserInsertions(prev => prev + data.stats.additions);
-                setUserDeletions(prev => prev + data.stats.deletions);
-                setUserCommitCount(prev => prev + 1);
-            }
-            //check if userInfo is null
-            if(userInfo === null){
-                //check if author is the same as username, ignore casing
-                if(data.author.login.toLowerCase() === username.toLowerCase()){
-                    setUserInfo(data.author);
+            if(userinfo.findIndex(user => user.login === data.author.login) === -1){
+                const userObj = {
+                    login: data.author.login,
+                    avatar_url: data.author.avatar_url,
+                    insertions: data.stats.additions,
+                    deletions: data.stats.deletions,
+                    commitCount: 1
                 }
+                userinfo.push(userObj);
+            } else {
+                const index = userinfo.findIndex(user => user.login === data.author.login);
+                userinfo[index].insertions += data.stats.additions;
+                userinfo[index].deletions += data.stats.deletions;
+                userinfo[index].commitCount += 1;
             }
 
             commits.push(data);
@@ -193,29 +162,18 @@ function PasteCommits(){
                 newRepoData[index].push(commit);
             }
         });
-        console.log(newRepoData);
+
+        setUsers(userinfo);
 
         setRepos(newRepos);
         setRepoData(newRepoData);
     }
-
-    // useEffect(() => {
-    //     // let url = 'https://api.github.com/repos/{repo}/commits?sha={branch}&since={start_date}T00:00:00Z&until={end_date}T23:59:59Z&author={username}'
-    //     if(jwt){
-            
-    //     }
-
-    //     // console.log(repos);
-
-    // }, [jwt]);
 
     useEffect(() => {
         if(fetching) return;
         //populate showDiff with false
         setShowDiff(new Array(repoData.flat().length).fill(false));
     }, [fetching]);
-
-    // useEffect(() => {console.log(repoData)}, [repoData]);
 
     const handleRepoClick = (index) => {
         if(index === 0){
@@ -303,7 +261,6 @@ function PasteCommits(){
                         ))}
                     </div>
                 </div>
-
             </Popup>    
             <Header />
             <div className="container">
@@ -324,54 +281,42 @@ function PasteCommits(){
                 </div>
                 <div className="right">
                     <div className="commit-right-header">
-                        <h1>{selected === 0 ? "Paste Commits" : repos[selected-1].path}</h1>
+                        <h1>{selected === 0 ? started? "Contribution Summary" : "Paste Commits" : repos[selected-1].path}</h1>
                     </div>
                     <div className="commit-right-subheader">
-                        {startDate && endDate ?<h2>{selected === 0 ? "showing all commits" : "showing select commits"} from {new Date(startDate).toLocaleDateString()} to {new Date(endDate).toLocaleDateString() } </h2>
+                        {startDate && endDate ?<h2>{selected === 0 ? started ? "showing all commits": "paste commits below" : "showing select commits"} from {new Date(startDate).toLocaleDateString()} to {new Date(endDate).toLocaleDateString() } </h2>
                          : 
-                         <h2>{selected === 0 ? "showing all commits" : "showing select commits"}</h2>
+                         <h2>{selected === 0 ? started ? "showing all commits": "paste commits below"  : "showing select commits"}</h2>
                         } 
                         <h2>{selected !== 0 ? repos[selected-1].ignoreMerge ? ", ignoring merges": null : null}</h2>
                     </div>
                     {
-                        started && !fetching && username !== "" &&
-                        <div className="user-details">
-                            <div className="user">
-                                <img src={userInfo && userInfo.avatar_url} alt="" />
-                                <div className="details">
-                                    <h2>{userInfo && userInfo.login}</h2>
-                                    <div className="diff">
-                                        <div className="deletion"></div>
-                                        <p>{userDeletions}</p>
-                                        <div className="insertion"></div>
-                                        <p>{userInsertions}</p>
+                        selected === 0 &&
+                        <div className="users">
+                            {
+                                users.length > 0 && users.map((user, index) => (
+                                <div className="user-details">
+                                    <div className="user">
+                                        <img src={user.avatar_url} alt="" />
+                                        <div className="details">
+                                            <h2>{user.login}</h2>
+                                            <div className="diff">
+                                                <div className="deletion"></div>
+                                                <p>{user.deletions}</p>
+                                                <div className="insertion"></div>
+                                                <p>{user.insertions}</p>
 
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="user-repos">
-                                {repos.map((repo, index) => (
-                                    <div className="user-repo" key={`${index}${repo}`}>
-                                        <h2>{repo.path}</h2>
-                                        <div className="diff">
-                                            <div className="deletion"></div>
-                                            {/* grab from repoData */}
-                                            <p>{ 
-                                                repoData[index].length !== 0 ?
-                                                (repoData[index].reduce((acc, curr) => acc + curr.stats.deletions, 0)).toFixed(0) : 0
-                                            }</p>
-                                            <div className="insertion"></div>
-                                            <p>
-                                                {
-                                                    repoData[index].length !== 0 ?
-                                                    (repoData[index].reduce((acc, curr) => acc + curr.stats.additions, 0)).toFixed(0) : 0
-                                                    
-                                                }
-                                            </p>
+                                            </div>
                                         </div>
                                     </div>
-                                ))}
-                            </div>
+                                    <div className="user-repos">
+                                        <div className="user-repo">
+                                            <h2>{user.commitCount} commits</h2>
+                                        </div>
+                                    </div>
+                                </div>
+                                ))
+                            }
                         </div>
                     }
                     {started ? 
@@ -391,7 +336,7 @@ function PasteCommits(){
                                 </div>
                                 {errors.length > 0 &&                 
                                     <button className="error" onClick={handleShowError}>
-                                        <Icon dimension={20} type={"Error"}/>
+                                        <Icon dimension={15} type={"Error"}/>
                                         {errors.length } errors
                                     </button>
                                 }
@@ -420,10 +365,7 @@ function PasteCommits(){
 
                     :
                         <div className="input">
-                            <div className="username">
-                                {/* <label htmlFor="username"><p>Username</p></label> */}
-                                <input type="text" placeholder='Github Username' value={username} onChange={handleUsernameChange}/>
-                            </div>
+
                             {parsed ?
                                 <div className="parsed-commits">
                                     {parsedCommits.map((commit, index) => (

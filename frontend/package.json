@@ -15,6 +15,7 @@
     "react-router-dom": "^6.22.3",
     "react-scripts": "5.0.1",
     "rsuite": "^5.59.1",
+    "sass": "^1.79.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
