@@ -125,6 +125,10 @@ function Home() {
         navigate(`/commits?data=${encodeURIComponent(JSON.stringify(info))}`);
     };
 
+    const goToPasteCommits = () => {
+        navigate('/paste-commits');
+    }
+
     useEffect(() => {console.log(repos)}, [repos]);
 
     async function getRepo(apiUrl) {
@@ -217,7 +221,10 @@ function Home() {
     return (
         <div className="home">
             <div className="content-container">
-                <div className="title"><h1>Commit Getter</h1></div>
+                <div className="title">
+                    <h1>Commit Getter</h1>
+                    <button onClick={goToPasteCommits}>mentor view</button>
+                    </div>
                 <div className="content">
                     <div className="content-header">
                         <div className="left">

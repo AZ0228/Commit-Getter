@@ -91,7 +91,6 @@ function Commits(){
     //     });
     // }
 
-
     async function getToken() {
         // Check if a token is stored and valid
         let token = sessionStorage.getItem('jwtToken');
@@ -310,13 +309,13 @@ function Commits(){
                             { selected === 0 ?
                                 repoData.map((repo, index) => (
                                     repo.map((commit, index) => (
-                                        <Commit index={index} commit={commit} key={`${commit.sha}${index}`} showDiff={()=>handleShowDiff(commit)}/>
+                                        <Commit index={index} commit={commit} key={`${commit.sha}${index}`} showDiff={()=>handleShowDiff(commit)} error={false}/>
 
                                     ))
                                 ))
                                 :
                                 repoData[selected-1].map((commit, index) => (
-                                    <Commit index={index} commit={commit} key={`${commit.sha}${index}`} showDiff={()=>handleShowDiff(commit)}/>
+                                    <Commit index={index} commit={commit} key={`${commit.sha}${index}`} showDiff={()=>handleShowDiff(commit)} error={false}/>
                                 ))
                             }
                         </div>

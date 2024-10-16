@@ -3,12 +3,11 @@ import "./Commit.css";
 import Icon from "../Icon/Icon";
 import { set } from "rsuite/esm/utils/dateUtils";
 
-function Commit({ index, commit, showDiff }) {
-    const [path, setPath] = useState(commit.html_url.split('github.com/')[1].split('/commit')[0]);
-    const [message, setMessage] = useState(commit.commit.message);
+function Commit({ index, commit, showDiff, showAuthor, error }) {
+    const [path, setPath] = useState(error? null : commit.html_url.split('github.com/')[1].split('/commit')[0]);
+    const [message, setMessage] = useState(error? null : commit.commit.message);
     const [copyIcon, setCopyIcon] = useState("Copy");
     const [animation, setAnimation] = useState(true);
-    //checking if commit link is valid
 
     useEffect(() => {
         setTimeout(() => {
@@ -23,6 +22,18 @@ function Commit({ index, commit, showDiff }) {
         setTimeout(() => {
             setCopyIcon("Copy");
         }, 1000);
+    }
+
+    if(error){
+        return (
+            <div className={`commit ${animation ? "before" : ""}`}>
+                <div className="commit-left">
+                    <div className="commit-header">
+                        <h3>{error}</h3>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     return (
@@ -40,6 +51,14 @@ function Commit({ index, commit, showDiff }) {
                                 <div className="insertion"></div>
                                 <p>{commit.stats.additions}</p>
                             </div>  
+                        }
+                        {
+                            showAuthor && 
+                            <div className="author">
+                                <img src={commit.author.avatar_url} alt="" />
+                                <p>{commit.author ? commit.author.login : commit.commit.author.name}</p>
+                            </div>
+
                         }
                     </div>
                 </div>
