@@ -132,17 +132,18 @@ function Home() {
     useEffect(() => {console.log(repos)}, [repos]);
 
     async function getRepo(apiUrl) {
-        // const apiUrl = `https://api.github.com/repos/${path}}`;
-        try{
+        try {
             const repoResponse = await fetch(apiUrl, {
                 headers: {
                     'Authorization': `${jwt}`,
                     'Accept': 'application/vnd.github.v3+json'
-                    }
+                }
             });
+    
             if (!repoResponse.ok) {
-                throw new Error(`HTTP error! Status: ${repoResponse.status}`);  // Throws an error on non-200 responses
+                throw new Error(`HTTP error! Status: ${repoResponse.status}`);
             }
+    
             const repoData = await repoResponse.json();
             let repo = {
                 path: repoData.full_name,
@@ -151,31 +152,54 @@ function Home() {
                 chosenBranchIndexes: [0],
                 ignoreMerge: false
             };
-            const branchResponse = await fetch(repoData.branches_url.replace('{/branch}', ''), {
-                headers: {
-                    'Authorization': `${jwt}`,
-                    'Accept': 'application/vnd.github.v3+json'
+    
+            let branchesUrl = repoData.branches_url.replace('{/branch}', '');
+            let branches = [];
+            let page = 1;
+    
+            // Fetch all branches with pagination
+            while (branchesUrl) {
+                const branchResponse = await fetch(`${branchesUrl}?per_page=100&page=${page}`, {
+                    headers: {
+                        'Authorization': `${jwt}`,
+                        'Accept': 'application/vnd.github.v3+json'
                     }
-            });
-            if (!branchResponse.ok) {
-                throw new Error(`HTTP error! Status: ${branchResponse.status}`);  // Throws an error on non-200 responses
-            }
-            const branchData = await branchResponse.json();
-            console.log(branchData);
-            for (let i = 0; i < branchData.length; i++) {
-                if(branchData[i].name === "main"){
-                    repo.branches.unshift(branchData[i].name);
+                });
+    
+                if (!branchResponse.ok) {
+                    throw new Error(`HTTP error! Status: ${branchResponse.status}`);
+                }
+    
+                const branchData = await branchResponse.json();
+                branches = branches.concat(branchData);
+    
+                // Check if there is a next page
+                const linkHeader = branchResponse.headers.get('Link');
+                const hasNextPage = linkHeader && linkHeader.includes('rel="next"');
+    
+                if (hasNextPage) {
+                    page++;
                 } else {
-                    repo.branches.push(branchData[i].name);
+                    break;
                 }
             }
+    
+            // Sort branches with "main" first
+            for (let branch of branches) {
+                if (branch.name === "main") {
+                    repo.branches.unshift(branch.name);
+                } else {
+                    repo.branches.push(branch.name);
+                }
+            }
+    
             setRepos([...repos, repo]);
-        } catch(error){
+        } catch (error) {
             setAddRepoError('Error fetching repository');
             console.error('Error:', error);
         }
     }
-
+    
     const handleSubmitLink = (link) => {
         //checking to see if already fetched
         for(let i = 0; i < repos.length; i++){
