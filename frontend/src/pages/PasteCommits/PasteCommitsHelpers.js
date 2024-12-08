@@ -19,9 +19,12 @@ function validateGithubCommitLinks(input) {
         }
     });
 
+    //remove duplicates
+    let uniqueLinks = [...new Set(links)];
+
     //return both valid and non-valid links
     return {
-        validLinks,
+        validLinks: uniqueLinks,
         nonValidLinks
     };
 }
