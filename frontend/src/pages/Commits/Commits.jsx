@@ -162,6 +162,9 @@ function Commits(){
             setFetchedData(true);
         }
         console.log("fetching");
+    
+        const seenCommits = new Set();  // Initialize a set to track seen commit hashes
+    
         for (let i = 0; i < repos.length; i++) {
             const repo = repos[i];
             let commitResponses = [];
@@ -170,57 +173,56 @@ function Commits(){
                 if(!startDate || !endDate){
                     url = `https://api.github.com/repos/${repo.path}/commits?sha=${branch}&author=${username}&per_page=100`;
                 }
-                let commitResponse = await fetchAllCommits(url);
-                let difference = commitResponse.filter(value => !commitResponses.includes(value));
+                let fetchedCommits = await fetchAllCommits(url);
+                fetchedCommits = fetchedCommits.filter(commit => {
+                    const isNew = !seenCommits.has(commit.sha);
+                    if (isNew) seenCommits.add(commit.sha);  // Add new commit hash to the set
+                    return isNew;
+                });
+    
+                let difference = fetchedCommits.filter(value => !commitResponses.includes(value));
                 commitResponses = commitResponses.concat(difference);
             }
-            // let commitResponse = await fetchAllCommits(url);
-            //determining if the commit meets the minChanges requirement
-            // if (minChanges) {
-                // const filteredCommits = [];
-                for (let commit of commitResponses) {
-                    if(repo.ignoreMerge && commit.parents.length > 1){
-                        continue;
-                    }
-                    setCommitCount(prev => prev + 1);
-                    const commitUrl = `https://api.github.com/repos/${repo.path}/commits/${commit.sha}`;
-                    const detailResponse = await fetch(commitUrl, {
-                        headers: {
-                            'Authorization': `Bearer ${jwt}`,
-                            'Accept': 'application/vnd.github+json'
-                        }
-                    });
-                    if (!detailResponse.ok) {
-                        throw new Error(`HTTP error! Status: ${detailResponse.status}`);
-                    }
-                    const commitData = await detailResponse.json();
-                    console.log(commitData);
-                    if (commitData.stats.total >= minChanges) {
-                        setRepoData(prev => {
-                            if (i < 0 || i >= prev.length) {
-                                console.error("List index out of bounds");
-                                return prev;
-                            }
-                            return prev.map((list, index) => {
-                                if (index === i) {
-                                    return [...list, commitData];
-                                }
-                                return list;
-                            });
-                        });
-                    }
-                    setInsertionsAverage(prev => (prev + commitData.stats.additions));
-                    setDeletionsAverage(prev => (prev + commitData.stats.deletions));
+    
+            for (let commit of commitResponses) {
+                if(repo.ignoreMerge && commit.parents.length > 1){
+                    continue;
                 }
-                // commitResponse = filteredCommits; // Replace the original commits array with filtered commits
-                // } else {
-                    //     setRepoData(prev => [...prev, commitResponse]);
-                    // }
-                    // console.log(commitData);
+                setCommitCount(prev => prev + 1);
+                const commitUrl = `https://api.github.com/repos/${repo.path}/commits/${commit.sha}`;
+                const detailResponse = await fetch(commitUrl, {
+                    headers: {
+                        'Authorization': `Bearer ${jwt}`,
+                        'Accept': 'application/vnd.github+json'
+                    }
+                });
+                if (!detailResponse.ok) {
+                    throw new Error(`HTTP error! Status: ${detailResponse.status}`);
+                }
+                const commitData = await detailResponse.json();
+                console.log(commitData);
+                if (commitData.stats.total >= minChanges) {
+                    setRepoData(prev => {
+                        if (i < 0 || i >= prev.length) {
+                            console.error("List index out of bounds");
+                            return prev;
+                        }
+                        return prev.map((list, index) => {
+                            if (index === i) {
+                                return [...list, commitData];
+                            }
+                            return list;
+                        });
+                    });
+                }
+                setInsertionsAverage(prev => (prev + commitData.stats.additions));
+                setDeletionsAverage(prev => (prev + commitData.stats.deletions));
             }
+        }
         setFetching(false);
-    //https://api.github.com/repos/AZ0228/Study-Compass/commits/9257742d295631a365cdf8b42b1197b5aaf09f4e
     }
+
+    // http://localhost:3000/commits?data=%7B"username"%3A"anthonyfabius"%2C"minChanges"%3A"100"%2C"startDate"%3A"2025-01-01T22%3A18%3A51.093Z"%2C"endDate"%3A"2025-01-31T22%3A18%3A51.093Z"%2C"repos"%3A%5B%7B"path"%3A"ParadiseOS%2FParadiseOS"%2C"branches"%3A%5B"refactor"%2C"keyboard"%2C"master"%5D%2C"ignoreMerge"%3Atrue%7D%5D%7D
 
     useEffect(() => {
         // let url = 'https://api.github.com/repos/{repo}/commits?sha={branch}&since={start_date}T00:00:00Z&until={end_date}T23:59:59Z&author={username}'
